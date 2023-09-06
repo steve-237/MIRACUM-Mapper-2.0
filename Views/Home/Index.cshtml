@@ -1,8 +1,98 @@
-﻿@{
+﻿@model List<ElementModel>
+
+@{
     ViewData["Title"] = "Home Page";
 }
+<div class="container-fluid h-100 d-flex flex-column justify-content-center align-items-center card mb-5">
+    <div class="container dashboard">
+        <div class="row justify-content-center align-items-center">
+            <div class="col">
+                <div class="form-group d-flex m-3 justify-content-center">
+                    <div class="col-6 pr-1 position-relative">
+                        <input type="text" id="customSearchInput" class="form-control flex-grow-1" placeholder="Search for a map...">
+                        <span class="search-icon">
+                            <i class="fas fa-search icon"></i>
+                        </span>
+                    </div>
+                </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+                <table id="elementTable" class="custom-table table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Created Map</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var element in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex justify-content-between align-items-center custom-div">
+                                        <div class="title">
+                                            <a href="#" class="text-decoration-none title"><strong><h4>@element.Titre</h4></strong><br></a>
+                                            <p class="version">Version : <span>@element.Version</span></p>
+                                        </div>
+                                        <div>
+                                            <button class="btn" data-toggle="tooltip" title="Edit the map">
+                                                <i class="fa-solid fa-pen-to-square icon"></i>
+                                            </button>
+                                            <button class="btn" data-toggle="tooltip" title="Delete the map">
+                                                <i class="fas fa-trash icon"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            // DataTables
+            var table = $('#elementTable').DataTable({
+                dom: 'rt<"d-flex" <"bottom col-md-4"> <"bottom col-md-3 m-2"l><"bottom col-md-1"i><"bottom ml-3 col-md-3"p>><"clear">',
+                paging: true,
+                responsive: true,
+                lengthMenu: [3, 4, 10, 25, 50],
+                pageLength: 3,
+                searching: true,
+                pagingType: "full",
+                language: {
+                    "paginate": {
+                        "first": '<i class="fas fa-angle-double-left"></i>',
+                        "previous": '<i class="fas fa-angle-left"></i>',
+                        "next": '<i class="fas fa-angle-right"></i>',
+                        "last": '<i class="fas fa-angle-double-right"></i>',
+                        "page": "_PAGE_"
+                    },
+                    "lengthMenu": "Items per page : _MENU_",
+                    "info": "_START_ - _END_ of _TOTAL_",
+                    "emptyTable": "No data available in the table",
+                    "infoEmpty": "0 - 0 of 0",
+                    "infoFiltered": ""
+                }
+            });
+
+            // Customised DataTables search
+            $("#customSearchButton").on("click", function () {
+                var searchText = $("#customSearchInput").val().toLowerCase();
+                table.search(searchText).draw();
+            });
+
+            // Update the search each time you enter data to trigger it in real time
+            $("#customSearchInput").on("input", function () {
+                var searchText = $(this).val().toLowerCase();
+                table.search(searchText).draw();
+            });
+        });
+    </script>
+}
