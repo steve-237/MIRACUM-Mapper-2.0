@@ -1,4 +1,4 @@
-﻿@model List<ElementModel>
+﻿@model List<Project>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -29,7 +29,7 @@
                                 <td>
                                     <div class="d-flex justify-content-between align-items-center custom-div">
                                         <div class="title">
-                                            <a href="#" class="text-decoration-none title"><strong><h4>@element.Titre</h4></strong><br></a>
+                                            <a href="#" class="text-decoration-none title"><strong><h5>@element.Name</h5></strong><br></a>
                                             <p class="version">Version : <span>@element.Version</span></p>
                                         </div>
                                         <div>

@@ -15,22 +15,12 @@ namespace MIRACUM_Mapper.Controllers
 
         public IActionResult Index()
         {
-            var elements = new List<ElementModel>
+            var elements = new List<Project>
             {
-                new ElementModel { Id = 1, Titre = "Élément 1" , Version = 1},
-                new ElementModel { Id = 2, Titre = "Élément 2", Version = 5 },
-                new ElementModel { Id = 3, Titre = "jean 1" , Version = 7},
-                new ElementModel { Id = 4, Titre = "paul 2", Version = 0 },
-                new ElementModel { Id = 5, Titre = "eli 1" , Version = 4},
-                new ElementModel { Id = 6, Titre = "vent 2" , Version = 3},
-                new ElementModel { Id = 7, Titre = "chat 1" , Version = 1},
-                new ElementModel { Id = 8, Titre = "paul 2" , Version = 1},
-                new ElementModel { Id = 3, Titre = "jean 1" , Version = 1},
-                new ElementModel { Id = 4, Titre = "paul 2" , Version = 1},
-                new ElementModel { Id = 5, Titre = "eli 1" , Version = 1},
-                new ElementModel { Id = 6, Titre = "vent 2" , Version = 1},
-                new ElementModel { Id = 7, Titre = "chat 1" , Version = 1},
-                new ElementModel { Id = 8, Titre = "paul 2", Version = 1},
+                new Project { Id = 1, Name = "Internal LabCode to LOINC Mapping", Version = 1.0f},
+                new Project { Id = 2, Name = "SNOMED to ICD Mapping", Version = 1.9f},
+                new Project { Id = 3, Name = "ICD-10 to LOINC Mapping", Version = 0.8f},
+                new Project { Id = 4, Name = "ICD-10 to SNOMED-CT Mapping", Version = 2.8f}
             };
             return View(elements);
         }
