@@ -45,6 +45,34 @@ namespace MIRACUM_Mapper.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult Edit([FromBody] Project editedProject)
+        {
+            if (editedProject == null)
+            {
+                return Json(new { success = false, message = "Invalid data or data not provided." });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return Json(new { success = false, errors = errors });
+            }
+
+            var existingProject = FindProjectById(editedProject.Id);
+            if (existingProject == null)
+            {
+                return Json(new { success = false, message = "Project not found." });
+            }
+
+            existingProject.Name = editedProject.Name;
+            existingProject.Version = editedProject.Version;
+
+            return Json(new { success = true, message = "Data updated successfully.", existingProject });
+        }
+
+        private Project FindProjectById(int id) => elements.FirstOrDefault(project => project.Id == id);
+
         public IActionResult Privacy()
         {
             return View();
