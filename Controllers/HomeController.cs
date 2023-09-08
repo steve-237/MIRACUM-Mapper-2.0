@@ -22,7 +22,6 @@ namespace MIRACUM_Mapper.Controllers
 
         public IActionResult Index()
         {
-
             return View(elements);
         }
 
