@@ -94,7 +94,7 @@ table.custom-table tbody td {
 .search-icon {
     position: absolute;
     top: 50%;
-    right: 15px;
+    right: 25px;
     transform: translateY(-50%);
     cursor: pointer;
 }
