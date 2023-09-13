@@ -1,8 +1,11 @@
-﻿namespace MIRACUM_Mapper.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MIRACUM_Mapper.Models
 {
     public class Project
     {
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
         public float Version { get; set; }
         public List<Source>? Sources { get; set; }

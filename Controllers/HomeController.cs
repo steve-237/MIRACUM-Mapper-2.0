@@ -9,10 +9,10 @@ namespace MIRACUM_Mapper.Controllers
         private readonly ILogger<HomeController> _logger;
         private List<Project> elements = new List<Project>
         {
-             new Project { Id = 1, Name = "Internal LabCode to LOINC Mapping", Version = 1.0f},
-             new Project { Id = 2, Name = "SNOMED to ICD Mapping", Version = 1.9f},
-             new Project { Id = 3, Name = "ICD-10 to LOINC Mapping", Version = 0.8f},
-             new Project { Id = 4, Name = "ICD-10 to SNOMED-CT Mapping", Version = 2.8f}
+             new Project { Id = 1, Name = "Internal LabCode to LOINC Mapping", Version = 1.0f, Sources = {}, Targets = {} },
+             new Project { Id = 2, Name = "SNOMED to ICD Mapping", Version = 1.9f, Sources = {}, Targets = {}},
+             new Project { Id = 3, Name = "ICD-10 to LOINC Mapping", Version = 0.8f, Sources = {}, Targets = {}},
+             new Project { Id = 4, Name = "ICD-10 to SNOMED-CT Mapping", Version = 2.8f, Sources = {}, Targets = {}}
         };
 
         public HomeController(ILogger<HomeController> logger)
@@ -23,6 +23,11 @@ namespace MIRACUM_Mapper.Controllers
         public IActionResult Index()
         {
             return View(elements);
+        }
+
+        public List<Project> GetAllProjects()
+        {
+            return elements;
         }
 
         [HttpDelete]
@@ -61,13 +66,15 @@ namespace MIRACUM_Mapper.Controllers
             var existingProject = FindProjectById(editedProject.Id);
             if (existingProject == null)
             {
-                return Json(new { success = false, message = "Project not found." });
+                return Json(new { success = false, message = "Project not found.", editedProject });
             }
 
             existingProject.Name = editedProject.Name;
             existingProject.Version = editedProject.Version;
 
-            return Json(new { success = true, message = "Data updated successfully.", existingProject });
+            var updatedProjects = GetAllProjects();
+
+            return Json(new { success = true, message = "Data updated successfully.", updatedProjects, editedProject });
         }
 
         private Project FindProjectById(int id) => elements.FirstOrDefault(project => project.Id == id);

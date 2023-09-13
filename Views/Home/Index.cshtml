@@ -80,8 +80,8 @@
                                 <td>
                                     <div class="d-flex justify-content-between align-items-center custom-div">
                                         <div class="title">
-                                            <a href="#" class="text-decoration-none title"><h5>@element.Name</h5><br></a>
-                                            <p class="version">Version : <span>@element.Version</span></p>
+                                            <a href="#" class="text-decoration-none title"><h5 class="name-field">@element.Name</h5></a><br>
+                                            <p class="version">Version : <span class="version-field">@element.Version</span></p>
                                         </div>
                                         <div>
                                             <button type="button" class="btn edit-button" data-toggle="modal" data-placement="top" title="Edit the map" data-target="#projectModal" data-id="@element.Id" data-name="@element.Name" data-version="@element.Version" data-sources="@element.Sources" data-targets="@element.Targets">
@@ -136,6 +136,7 @@
             </div>
             <div class="modal-body">
                 <form id="editForm">
+                    <input type="hidden" id="editId" />
                     <div class="form-group">
                         <label for="editName">Name:</label>
                         <input type="text" class="form-control" id="editName" name="editName">
@@ -228,34 +229,52 @@
                 }
             });
 
+            var editedRow;
+
             $('.edit-button').on('click', function () {
+
+                editedRow = $('#elementTable').DataTable().row($(this).closest('tr'));
                 var projectId = $(this).data('id');
                 var projectName = $(this).data('name');
                 var projectVersion = $(this).data('version');
 
+                $('#editId').val(projectId);
                 $('#editName').val(projectName);
                 $('#editVersion').val(projectVersion);
+
             });
 
-            $('#saveButton').on('click', function (data) {
-                var projectId = $(this).data('id')
+            $('#saveButton').on('click', function () {
+                var projectId = $('#editId').val();
                 var editedName = $('#editName').val();
                 var editedVersion = $('#editVersion').val();
 
                 var updatedData = {
-                    id: projectId, 
-                    name: editedName,
-                    version: editedVersion
+                    id: projectId,
+                    name: $('#editName').val(),
+                    version: $('#editVersion').val()
                 };
 
+                console.log(updatedData);
+
                 $.ajax({
-                    url: '/Home/Edit/' + updatedData,
+                    url: '/Home/Edit/',
                     type: 'POST',
                     data: JSON.stringify(updatedData),
                     contentType: 'application/json',
                     success: function (data) {
-                        console.log('Data updated successfully.', data);
-                        $('#projectModal').modal('hide'); //close the modal after saving
+                        if(data.success) {
+                            var rowIndex = editedRow.index(); // Retrieve the index of the modified line
+
+                            table.cell(rowIndex, 0).node().querySelector('.name-field').innerText = data.editedProject.name; //Column 0: Name
+                            table.cell(rowIndex, 0).node().querySelector('.version-field').innerText = data.editedProject.version; // Column 0 : Version
+
+                            console.log('Data updated successfully.', data);
+                            // Close the modal
+                            $("[data-dismiss=modal]").trigger({ type: "click" });
+                        } else {
+                            console.error('Error updating data.', data);
+                        }
                     },
                     error: function (xhr, status, error) {
                         console.error('Error updating data: ' + error);
