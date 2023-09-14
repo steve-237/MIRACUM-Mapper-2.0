@@ -49,7 +49,7 @@
                                 <td>
                                     <div class="d-flex justify-content-between align-items-center custom-div">
                                         <div class="title">
-                                            <a href="@Url.Action("Home", "HomeController", new { id = element.Id })" class="text-decoration-none title"><h5 class="name-field">@element.Name</h5></a><br>
+                                            <a asp-controller="Mapping" asp-action="Index" asp-route-id="@element.Id" class="text-decoration-none title"><h5 class="name-field">@element.Name</h5></a><br>
                                             <p class="version">Version : <span class="version-field">@element.Version</span></p>
                                         </div>
                                         <div>
