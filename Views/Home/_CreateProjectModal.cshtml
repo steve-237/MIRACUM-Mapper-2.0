@@ -1,0 +1,158 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="modal fade" id="createProjectModal" tabindex="-1" role="dialog" aria-labelledby="createProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createProjectModalLabel">Create New Project</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createProjectForm">
+                    <div class="form-row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label for="projectName">Name</label>
+                                <input type="text" class="form-control" id="projectName" placeholder="Enter project name">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="projectVersion">Version</label>
+                                <input type="text" class="form-control" id="projectVersion" placeholder="Enter project version">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectDescription">Description</label>
+                        <textarea class="form-control" type="text" id="projectDescription" placeholder="Enter project description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectSources">Sources</label>
+                        <div class="form-row">
+                            <div class="col-md-9">
+                                <select class="form-control" id="projectSources">
+                                    <option value="source1">Source 1</option>
+                                    <option value="source2">Source 2</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn" style="margin-left: 22px;" type="button" id="addSourceButton">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button class="btn" type="button" id="importSourceButton">
+                                    <i class="fas fa-upload"></i>
+                                </button>
+                            </div>
+                            <div class="input-group-append">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectTargets">Targets</label>
+                        <div class="form-row">
+                            <div class="col-md-9">
+                                <select class="form-control" id="projectTargets">
+                                    <option value="target1">Target 1</option>
+                                    <option value="target2">Target 2</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn" style="margin-left: 22px;" type="button" id="addSourceButton">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button class="btn" type="button" id="importSourceButton">
+                                    <i class="fas fa-upload"></i>
+                                </button>
+                            </div>
+                            <div class="input-group-append">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-light">
+                        <div class="accordion" id="advancedSettingsAccordion">
+                            <div class="card">
+                                <div class="card-header" id="advancedSettingsHeader">
+                                    <h6 class="mb-0">
+                                        <a data-toggle="collapse" data-target="#advancedSettingsCollapse" aria-expanded="true" aria-controls="advancedSettingsCollapse">
+                                            Advanced Settings
+                                        </a>
+                                    </h6>
+                                </div>
+
+                                <div id="advancedSettingsCollapse" class="collapse" aria-labelledby="advancedSettingsHeader" data-parent="#advancedSettingsAccordion">
+                                    <div class="card-body bg-light">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="displayEquivalenceCheckbox">
+                                            <label class="form-check-label" for="displayEquivalenceCheckbox">
+                                                Display Mapping Equivalence
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="displayStatusCheckbox">
+                                            <label class="form-check-label" for="displayStatusCheckbox">
+                                                Display Status
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-light">
+                        <div class="accordion" id="membersAccordion">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between" id="membersHeader">
+                                    <h6 class="mb-0">
+                                        <a data-toggle="collapse" data-target="#membersCollapse" aria-expanded="true" aria-controls="membersCollapse">
+                                            Project Members
+                                        </a>
+                                    </h6>
+                                    <h6 class="mb-0">
+                                        <a>Add Member</a>
+                                    </h6>
+                                </div>
+
+                                <div id="membersCollapse" class="collapse" aria-labelledby="membersHeader" data-parent="#membersAccordion">
+                                    <div class="card-body bg-light">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Role</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>John Doe</td>
+                                                    <td>Project Owner</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Jane Smith</td>
+                                                    <td>Reviewer</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveProjectButton">Create Project</button>
+            </div>
+        </div>
+    </div>
+</div>
