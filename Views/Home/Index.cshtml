@@ -56,9 +56,6 @@
                                             <button type="button" class="btn edit-button" data-toggle="modal" data-placement="top" title="Edit the map" data-target="#editProjectModal" data-id="@element.Id" data-name="@element.Name" data-version="@element.Version" data-sources="@element.Sources" data-targets="@element.Targets">
                                                 <i class="fa-solid fa-pen-to-square icon"></i>
                                             </button>
-                                            @* <a href="@Url.Action("Edit", "EditController", new { id = element.Id })" class="btn" data-toggle="tooltip" title="Edit the map">
-                                                <i class="fa-solid fa-pen-to-square icon"></i>
-                                            </a> *@
                                             <button class="btn delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-id="@element.Id">
                                                 <i class="fas fa-trash icon"></i>
                                             </button>
@@ -203,6 +200,26 @@
                         console.error('Error updating data: ' + error);
                     }
                 });
+            });
+
+            $(".add-button").click(function () {
+                var formRow = $(this).closest(".form-row");
+
+                var col9Div = $("<div class='col-md-9'></div>");
+
+                var newSelect = $("<select class='form-control target-select mt-2' id='projectTargets'></select>");
+
+                newSelect.append("<option value='target1'>Target 1</option>");
+                newSelect.append("<option value='target2'>Target 2</option>");
+
+                var removeButton = $("<button class='btn btn-danger remove-button mt-2' style='margin-left: 30px;' type = 'button' > <i class='fas fa-minus' > </i></button > ");
+                var importButton = $("<button class='btn import-button mt-2 ml-1' type='button'><i class='fas fa-upload'></i></button>");
+
+                removeButton.click(function () {
+                    formRow.remove();
+                });
+
+                formRow.append(col9Div.append(newSelect)).append(removeButton).append(importButton);
             });
         });
     </script>
