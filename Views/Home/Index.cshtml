@@ -215,6 +215,7 @@
 
                     newFormGroup.attr("id", newId);
                     newFormGroup.find("select").attr("id", "projectSelectSource" + sourceFieldCount);
+                    newFormGroup.find("select").attr("name", "projectSelectSource" + sourceFieldCount);
 
                     var removeButton = $("<button class='btn btn-danger remove-button mt-2' style='margin-left: 22px;' type = 'button' > <i class='fas fa-minus' > </i></button > ");
                     var importButton = $("<button class='btn import-button mt-2 ml-1' type='button'><i class='fas fa-upload'></i></button>");
@@ -253,10 +254,11 @@
 
                     newFormGroup.attr("id", newId);
                     newFormGroup.find("select").attr("id", "projectSelectTarget" + targetFieldCount);
+                    newFormGroup.find("select").attr("name", "projectSelectTarget" + targetFieldCount);
 
                     var removeButton = $("<button class='btn btn-danger remove-button mt-2' style='margin-left: 22px;' type = 'button' > <i class='fas fa-minus' > </i></button > ");
                     var importButton = $("<button class='btn import-button mt-2 ml-1' type='button'><i class='fas fa-upload'></i></button>");
-                    
+
                     removeButton.click(function () {
                         newFormGroup.remove();
                         targetFieldCount--;
@@ -272,6 +274,49 @@
                         $("#alertMessage").fadeOut(500);
                     }, 3000);
                 }
+            });
+
+            $("#saveProjectButton").click(function () {
+
+                var Sources = [];
+                var Targets = [];
+
+                var maxElements = 5;
+
+                for (var i = 0; i < maxElements; i++) {
+
+                    var selectSourceId = "projectSelectSource" + i;
+                    var selectTargetId = "projectSelectTarget" + i;
+
+                    var selectSourceValue = $("select[name='" + selectSourceId + "']").val();
+                    var selectTargetValue = $("select[name='" + selectTargetId + "']").val();
+
+                    if (selectSourceValue !== undefined) {
+                        Sources.push(selectSourceValue);
+                    }
+
+                    if (selectTargetValue !== undefined) {
+                        Targets.push(selectTargetValue);
+                    }
+                }
+
+                var formData = {
+                    Name: $("#projectName").val(),
+                    Version: $("#projectVersion").val(),
+                    Description: $("#projectDescription").val(),
+                    Sources: Sources,
+                    Targets: Targets
+                };
+
+                console.log(formData);
+
+                $.ajax({
+                    data: formData, 
+                    success: function (response) {
+                    },
+                    error: function (error) {
+                    }
+                });
             });
         });
     </script>
