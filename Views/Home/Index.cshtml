@@ -16,9 +16,6 @@
             <a class="nav-link" href="#">Export Project</a>
         </li>
     </ul>
-    @* <ul> *@
-        @* @Html.ActionLink("À propos", "About", "Home")</li> *@
-    @* </ul> *@ 
 }
 
 @await Html.PartialAsync("_CreateProjectModal")
@@ -202,24 +199,79 @@
                 });
             });
 
-            $(".add-button").click(function () {
-                var formRow = $(this).closest(".form-row");
+            var sourceFieldCount = 1;
 
-                var col9Div = $("<div class='col-md-9'></div>");
+            $("#addSourceField").click(function () {
+                if (sourceFieldCount < 5) {
+                    var formGroup = $(this).closest('.form-row');
+                    var newFormGroup = formGroup.clone();
+                    newFormGroup.find("select").val("");
+                    newFormGroup.find(".add-button").remove();
+                    newFormGroup.find(".import-button").remove();
+                    newFormGroup.find("select").addClass('mt-2');
 
-                var newSelect = $("<select class='form-control target-select mt-2' id='projectTargets'></select>");
+                    var newId = "selectSource" + sourceFieldCount;
+                    console.log(newId);
 
-                newSelect.append("<option value='target1'>Target 1</option>");
-                newSelect.append("<option value='target2'>Target 2</option>");
+                    newFormGroup.attr("id", newId);
+                    newFormGroup.find("select").attr("id", "projectSelectSource" + sourceFieldCount);
 
-                var removeButton = $("<button class='btn btn-danger remove-button mt-2' style='margin-left: 30px;' type = 'button' > <i class='fas fa-minus' > </i></button > ");
-                var importButton = $("<button class='btn import-button mt-2 ml-1' type='button'><i class='fas fa-upload'></i></button>");
+                    var removeButton = $("<button class='btn btn-danger remove-button mt-2' style='margin-left: 22px;' type = 'button' > <i class='fas fa-minus' > </i></button > ");
+                    var importButton = $("<button class='btn import-button mt-2 ml-1' type='button'><i class='fas fa-upload'></i></button>");
+                    
+                    removeButton.click(function () {
+                        newFormGroup.remove();
+                        sourceFieldCount--;
+                    });
 
-                removeButton.click(function () {
-                    formRow.remove();
-                });
+                    newFormGroup.find('.col-md-3').append(removeButton).append(importButton);
 
-                formRow.append(col9Div.append(newSelect)).append(removeButton).append(importButton);
+                    formGroup.after(newFormGroup);
+                    sourceFieldCount++;
+                    console.log(sourceFieldCount);
+                } else {
+                    $("#alertMessage").fadeIn(500);
+                    setTimeout(function () {
+                        $("#alertMessage").fadeOut(500);
+                    }, 3000);
+                }
+            });
+
+            var targetFieldCount = 1;
+
+            $("#addTargetField").click(function () {
+                if (targetFieldCount < 5) {
+                    var formGroup = $(this).closest('.form-row');
+                    var newFormGroup = formGroup.clone();
+                    newFormGroup.find("select").val("");
+                    newFormGroup.find(".add-button").remove();
+                    newFormGroup.find(".import-button").remove();
+                    newFormGroup.find("select").addClass('mt-2');
+
+                    var newId = "selectTarget" + targetFieldCount;
+                    console.log(newId);
+
+                    newFormGroup.attr("id", newId);
+                    newFormGroup.find("select").attr("id", "projectSelectTarget" + targetFieldCount);
+
+                    var removeButton = $("<button class='btn btn-danger remove-button mt-2' style='margin-left: 22px;' type = 'button' > <i class='fas fa-minus' > </i></button > ");
+                    var importButton = $("<button class='btn import-button mt-2 ml-1' type='button'><i class='fas fa-upload'></i></button>");
+                    
+                    removeButton.click(function () {
+                        newFormGroup.remove();
+                        targetFieldCount--;
+                    });
+
+                    newFormGroup.find('.col-md-3').append(removeButton).append(importButton);
+
+                    formGroup.after(newFormGroup);
+                    targetFieldCount++;
+                } else {
+                    $("#alertMessage").fadeIn(500);
+                    setTimeout(function () {
+                        $("#alertMessage").fadeOut(500);
+                    }, 3000);
+                }
             });
         });
     </script>
