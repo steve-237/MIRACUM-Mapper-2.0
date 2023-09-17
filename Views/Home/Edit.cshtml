@@ -1,0 +1,80 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Project
+
+@section NavBarItems {
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" type="button" href="" data-toggle="modal" data-target="#createProjectModal">New Project</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Import Project</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Export Project</a>
+        </li>
+    </ul>
+}
+
+<div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProjectModalLabel"><span>Edit Project</span></h5>
+                <a asp-controller="Home" asp-action="Index" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </a>
+            </div>
+            <div class="modal-body">
+
+                <form id="editForm" asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                    <input type="hidden" id="Id" value="Id"/>
+                    <div class="form-row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label asp-for="Name">Name:</label>
+                                <input asp-for="Name" type="text" class="form-control" autocomplete="on">
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Version">Version:</label>
+                                <input asp-for="Version" type="text" class="form-control">
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projectDescription">Description</label>
+                        <input class="form-control" id="projectDescription" type="text" placeholder="Enter project description" rows="4">
+                    </div>
+
+                    <div class="modal-footer">
+                        <a asp-controller="Home" asp-action="Index" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-primary submit">Save</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#editProjectModal').modal('show');
+        });
+
+        $('.submit').submit(function (data) {
+
+            console.log(data);
+        });
+    </script>
+}

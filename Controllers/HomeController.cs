@@ -9,10 +9,10 @@ namespace MIRACUM_Mapper.Controllers
         private readonly ILogger<HomeController> _logger;
         private List<Project> elements = new List<Project>
         {
-             new Project { Id = 1, Name = "Internal LabCode to LOINC Mapping", Version = 1.0f, Sources = {}, Targets = {} },
-             new Project { Id = 2, Name = "SNOMED to ICD Mapping", Version = 1.9f, Sources = {}, Targets = {}},
-             new Project { Id = 3, Name = "ICD-10 to LOINC Mapping", Version = 0.8f, Sources = {}, Targets = {}},
-             new Project { Id = 4, Name = "ICD-10 to SNOMED-CT Mapping", Version = 2.8f, Sources = {}, Targets = {}}
+             new Project { Id = 1, Name = "Internal LabCode to LOINC Mapping", Description ="", Version = 1.0f, Sources = {}, Targets = {} },
+             new Project { Id = 2, Name = "SNOMED to ICD Mapping", Description ="",Version = 1.9f, Sources = {}, Targets = {}},
+             new Project { Id = 3, Name = "ICD-10 to LOINC Mapping", Description ="",Version = 0.8f, Sources = {}, Targets = {}},
+             new Project { Id = 4, Name = "ICD-10 to SNOMED-CT Mapping",Description ="", Version = 2.8f, Sources = {}, Targets = {}}
         };
 
         public HomeController(ILogger<HomeController> logger)
@@ -49,32 +49,74 @@ namespace MIRACUM_Mapper.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult Edit([FromBody] Project editedProject)
+        //[HttpPost]
+        //public IActionResult Edit([FromBody] Project editedProject)
+        //{
+        //    if (editedProject == null)
+        //    {
+        //        return Json(new { success = false, message = "Invalid data or data not provided." });
+        //    }
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+        //        return Json(new { success = false, errors = errors });
+        //    }
+
+        //    var existingProject = FindProjectById(editedProject.Id);
+        //    if (existingProject == null)
+        //    {
+        //        return Json(new { success = false, message = "Project not found.", editedProject });
+        //    }
+
+        //    existingProject.Name = editedProject.Name;
+        //    existingProject.Version = editedProject.Version;
+
+        //    var updatedProjects = GetAllProjects();
+
+        //    return Json(new { success = true, message = "Data updated successfully.", updatedProjects, editedProject });
+        //}
+
+        [HttpGet]
+        public IActionResult Edit(int Id)
         {
-            if (editedProject == null)
-            {
-                return Json(new { success = false, message = "Invalid data or data not provided." });
-            }
-
-            if (!ModelState.IsValid)
-            {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                return Json(new { success = false, errors = errors });
-            }
-
-            var existingProject = FindProjectById(editedProject.Id);
+            var existingProject = FindProjectById(Id);
             if (existingProject == null)
             {
-                return Json(new { success = false, message = "Project not found.", editedProject });
+                return Json(new { success = false, message = "Project not found." });
             }
-
-            existingProject.Name = editedProject.Name;
-            existingProject.Version = editedProject.Version;
 
             var updatedProjects = GetAllProjects();
 
-            return Json(new { success = true, message = "Data updated successfully.", updatedProjects, editedProject });
+            return View("edit", existingProject);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Project project)
+        {
+            if (id != project.Id)
+            {
+                return NotFound();
+            }
+
+            Project projectToUpdate = elements.Find(p => p.Id == project.Id);
+
+            if (!ModelState.IsValid)
+            {
+                if (projectToUpdate != null)
+                {
+                    projectToUpdate.Id = project.Id;
+                    projectToUpdate.Name = project.Name;
+                    projectToUpdate.Version = project.Version;
+                    projectToUpdate.Description = project.Description;
+                    projectToUpdate.Sources = project.Sources;
+                    projectToUpdate.Targets = project.Targets;
+                }
+                return View("index", elements);
+            }
+
+            return Json(new { success = false, message = "Data updated failed.", elements, projectToUpdate });
         }
 
         private Project FindProjectById(int id) => elements.FirstOrDefault(project => project.Id == id);

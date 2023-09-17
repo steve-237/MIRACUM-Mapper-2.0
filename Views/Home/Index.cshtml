@@ -50,9 +50,9 @@
                                             <p class="version">Version : <span class="version-field">@element.Version</span></p>
                                         </div>
                                         <div>
-                                            <button type="button" class="btn edit-button" data-toggle="modal" data-placement="top" title="Edit the map" data-target="#editProjectModal" data-id="@element.Id" data-name="@element.Name" data-version="@element.Version" data-sources="@element.Sources" data-targets="@element.Targets">
+                                            <a type="button" class="btn edit-button" asp-controller="Home" asp-action="Edit" asp-route-id="@element.Id">
                                                 <i class="fa-solid fa-pen-to-square icon"></i>
-                                            </button>
+                                            </a>
                                             <button class="btn delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-id="@element.Id">
                                                 <i class="fas fa-trash icon"></i>
                                             </button>
@@ -69,8 +69,6 @@
 </div>
 
 @await Html.PartialAsync("_ConfirmDelete")
-
-@await Html.PartialAsync("_EditProjectModal")
 
 @section scripts {
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
