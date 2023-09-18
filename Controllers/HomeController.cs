@@ -9,10 +9,10 @@ namespace MIRACUM_Mapper.Controllers
         private readonly ILogger<HomeController> _logger;
         private List<Project> elements = new List<Project>
         {
-             new Project { Id = 1, Name = "Internal LabCode to LOINC Mapping", Description ="", Version = 1.0f, Sources = {}, Targets = {} },
-             new Project { Id = 2, Name = "SNOMED to ICD Mapping", Description ="",Version = 1.9f, Sources = {}, Targets = {}},
-             new Project { Id = 3, Name = "ICD-10 to LOINC Mapping", Description ="",Version = 0.8f, Sources = {}, Targets = {}},
-             new Project { Id = 4, Name = "ICD-10 to SNOMED-CT Mapping",Description ="", Version = 2.8f, Sources = {}, Targets = {}}
+             new Project { Id = 1, Name = "Internal LabCode to LOINC Mapping", Description ="description id1", Version = 1.0f, Sources = {}, Targets = {}, DisplayMappingEquivalence= true, DisplayStatus=false},
+             new Project { Id = 2, Name = "SNOMED to ICD Mapping", Description ="description id2",Version = 1.9f, Sources = {}, Targets = {}, DisplayMappingEquivalence= true, DisplayStatus=true},
+             new Project { Id = 3, Name = "ICD-10 to LOINC Mapping", Description ="description id3",Version = 0.8f, Sources = {}, Targets = {}, DisplayMappingEquivalence= false, DisplayStatus=false},
+             new Project { Id = 4, Name = "ICD-10 to SNOMED-CT Mapping",Description ="description id4", Version = 2.8f, Sources = {}, Targets = {}, DisplayMappingEquivalence= false, DisplayStatus=true}
         };
 
         public HomeController(ILogger<HomeController> logger)
@@ -88,7 +88,7 @@ namespace MIRACUM_Mapper.Controllers
 
             var updatedProjects = GetAllProjects();
 
-            return View("edit", existingProject);
+            return View("Edit", existingProject);
         }
 
         [HttpPost]
@@ -102,7 +102,7 @@ namespace MIRACUM_Mapper.Controllers
 
             Project projectToUpdate = elements.Find(p => p.Id == project.Id);
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 if (projectToUpdate != null)
                 {
@@ -117,6 +117,12 @@ namespace MIRACUM_Mapper.Controllers
             }
 
             return Json(new { success = false, message = "Data updated failed.", elements, projectToUpdate });
+        }
+
+        public IActionResult EditModal(int projectId)
+        {
+            var project = FindProjectById(projectId);
+            return PartialView("_EditProjectModal", project);
         }
 
         private Project FindProjectById(int id) => elements.FirstOrDefault(project => project.Id == id);
