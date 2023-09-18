@@ -30,6 +30,14 @@ namespace MIRACUM_Mapper.Controllers
             return elements;
         }
 
+        [HttpPost]
+        public IActionResult Create(Project project)
+        {
+            elements.Add(project);
+            var newElements = elements;
+            return View("Index", newElements);
+        }
+
         [HttpDelete]
         public IActionResult Delete(int id)
         {
