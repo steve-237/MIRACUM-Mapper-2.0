@@ -274,48 +274,48 @@
                 }
             });
 
-            $("#saveProjectButton").click(function () {
+            // $("#saveProjectButton").click(function () {
 
-                var Sources = [];
-                var Targets = [];
+            //     var Sources = [];
+            //     var Targets = [];
 
-                var maxElements = 5;
+            //     var maxElements = 5;
 
-                for (var i = 0; i < maxElements; i++) {
+            //     for (var i = 0; i < maxElements; i++) {
 
-                    var selectSourceId = "projectSelectSource" + i;
-                    var selectTargetId = "projectSelectTarget" + i;
+            //         var selectSourceId = "projectSelectSource" + i;
+            //         var selectTargetId = "projectSelectTarget" + i;
 
-                    var selectSourceValue = $("select[name='" + selectSourceId + "']").val();
-                    var selectTargetValue = $("select[name='" + selectTargetId + "']").val();
+            //         var selectSourceValue = $("select[name='" + selectSourceId + "']").val();
+            //         var selectTargetValue = $("select[name='" + selectTargetId + "']").val();
 
-                    if (selectSourceValue !== undefined) {
-                        Sources.push(selectSourceValue);
-                    }
+            //         if (selectSourceValue !== undefined) {
+            //             Sources.push(selectSourceValue);
+            //         }
 
-                    if (selectTargetValue !== undefined) {
-                        Targets.push(selectTargetValue);
-                    }
-                }
+            //         if (selectTargetValue !== undefined) {
+            //             Targets.push(selectTargetValue);
+            //         }
+            //     }
 
-                var formData = {
-                    Name: $("#projectName").val(),
-                    Version: $("#projectVersion").val(),
-                    Description: $("#projectDescription").val(),
-                    Sources: Sources,
-                    Targets: Targets
-                };
+            //     var formData = {
+            //         Name: $("#projectName").val(),
+            //         Version: $("#projectVersion").val(),
+            //         Description: $("#projectDescription").val(),
+            //         Sources: Sources,
+            //         Targets: Targets
+            //     };
 
-                console.log(formData);
+            //     console.log(formData);
 
-                $.ajax({
-                    data: formData, 
-                    success: function (response) {
-                    },
-                    error: function (error) {
-                    }
-                });
-            });
+            //     $.ajax({
+            //         data: formData, 
+            //         success: function (response) {
+            //         },
+            //         error: function (error) {
+            //         }
+            //     });
+            // });
         });
     </script>
 }
