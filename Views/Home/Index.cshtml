@@ -49,11 +49,14 @@
                                             <a asp-controller="Mapping" asp-action="Index" asp-route-id="@element.Id" class="text-decoration-none title"><h5 class="name-field">@element.Name</h5></a><br>
                                             <p class="version">Version : <span class="version-field">@element.Version</span></p>
                                         </div>
-                                        <div>
-                                            <a type="button" class="btn edit-button" asp-controller="Home" asp-action="Edit" asp-route-id="@element.Id">
-                                                <i class="fa-solid fa-pen-to-square icon"></i>
-                                            </a>
-                                            <button class="btn delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-id="@element.Id">
+                                        <div class="custom-button-container">
+                                            <form asp-controller="Home" asp-action="EditModal" asp-route-id="@element.Id" method="post">
+                                                <input type="hidden" name="projectId" value="@element.Id" />
+                                                <button type="submit" class="btn edit-button">
+                                                    <i class="fa-solid fa-pen-to-square icon"></i>
+                                                </button>
+                                            </form>
+                                            <button class="btn delete-button custom-delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-id="@element.Id">
                                                 <i class="fas fa-trash icon"></i>
                                             </button>
                                         </div>

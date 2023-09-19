@@ -1,1 +1,168 @@
-﻿
+﻿@model Project
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function () {
+            console.log("Document ready");
+            $('#editProjectModal').modal('show');
+        });
+        $('.submit').submit(function (data) {
+            console.log(data);
+        });
+    </script>
+</head>
+<body>
+    <div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProjectModalLabel"><span>Edit Project</span></h5>
+                    <a asp-controller="Home" asp-action="Index" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </a>
+                </div>
+                <div class="modal-body">
+
+                    <form id="editForm" asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                        <input type="hidden" id="Id" value="Id" />
+                        <div class="form-row">
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label asp-for="Name">Name:</label>
+                                    <input asp-for="Name" type="text" class="form-control" placeholder="Name" autocomplete="on">
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label asp-for="Version">Version:</label>
+                                    <input asp-for="Version" type="text" class="form-control" placeholder="Version">
+                                    <span asp-validation-for="Version" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Description">Description :</label>
+                            <input asp-for="Description" class="form-control" type="text" placeholder="Project Description">
+                        </div>
+
+                        @* <div class="form-group">
+                        <label for="projectSelectSource0">Sources</label>
+                        @for (int i = 0; i < Model.Sources.Count; i++)
+                        {
+                        <div class="form-row">
+                        <div class="col-md-9">
+                        <select class="form-control source-select" id="projectSelectSource@(i)" name="Sources[@i]">
+                        <option value="" disabled selected>Choose a Source</option>
+                        @foreach (var source in Model.Sources)
+                        {
+                        <option value="@source">@source</option>
+                        }
+                        </select>
+                        </div>
+                        <div class="col-md-3">
+                        @if (i == 0)
+                        {
+                        <button class="btn add-button" id="addSourceField" style="margin-left: 22px;" type="button">
+                        <i class="fas fa-plus"></i>
+                        </button>
+                        }
+                        <button class="btn import-button" type="button">
+                        <i class="fas fa-upload"></i>
+                        </button>
+                        </div>
+                        </div>
+                        }
+                        </div>
+
+                        <div class="form-group">
+                        <label for="projectSelectTarget0">Targets</label>
+                        @for (int i = 0; i < Model.Targets.Count; i++)
+                        {
+                        <div class="form-row">
+                        <div class="col-md-9">
+                        <select class="form-control target-select" id="projectSelectTarget@(i)" name="Targets[@i]">
+                        <option value="" disabled selected>Choose a Target</option>
+                        @foreach (var target in Model.Targets)
+                        {
+                        <option value="@target">@target</option>
+                        }
+                        </select>
+                        </div>
+                        <div class="col-md-3">
+                        @if (i == 0)
+                        {
+                        <button class="btn add-button" id="addTargetField" style="margin-left: 22px;" type="button">
+                        <i class="fas fa-plus"></i>
+                        </button>
+                        }
+                        <button class="btn import-button" type="button">
+                        <i class="fas fa-upload"></i>
+                        </button>
+                        </div>
+                        </div>
+                        }
+                        </div> *@
+
+                        <div class="bg-light">
+                            <div class="accordion" id="advancedSettingsAccordion">
+                                <div class="card">
+                                    <div class="card-header" id="advancedSettingsHeader">
+                                        <h6 class="mb-0">
+                                            <a data-toggle="collapse" data-target="#advancedSettingsCollapse" aria-expanded="true" aria-controls="advancedSettingsCollapse">
+                                                Advanced Settings
+                                            </a>
+                                        </h6>
+                                    </div>
+
+                                    <div id="advancedSettingsCollapse" class="collapse" aria-labelledby="advancedSettingsHeader" data-parent="#advancedSettingsAccordion">
+                                        <div class="card-body bg-light">
+                                            @for (int i = 0; i < 2; i++)
+                                            {
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="displayCheckbox@(i)" name="DisplayCheckbox@(i)"
+                                                    @(i == 0 && Model.DisplayMappingEquivalence ? "checked" : "")
+                                                    @(i == 1 && Model.DisplayStatus ? "checked" : "")>
+                                                    <label class="form-check-label" for="displayCheckbox@(i)">
+                                                        @if (i == 0)
+                                                        {
+                                                            <span>Display Mapping Equivalence</span>
+                                                        }
+                                                        else if (i == 1)
+                                                        {
+                                                            <span>Display Status</span>
+                                                        }
+                                                    </label>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer custom-modal-footer">
+                            <a asp-controller="Home" asp-action="Index" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</a>
+                            <button type="submit" class="btn btn-primary submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -130,7 +130,15 @@ namespace MIRACUM_Mapper.Controllers
         public IActionResult EditModal(int projectId)
         {
             var project = FindProjectById(projectId);
-            return PartialView("_EditProjectModal", project);
+
+            Project model = new Project
+            {
+                Id = project.Id,
+                Name = project.Name,
+                Version = project.Version,
+                Description = project.Description
+            };
+            return PartialView("_EditProjectModal", model);
         }
 
         private Project FindProjectById(int id) => elements.FirstOrDefault(project => project.Id == id);
