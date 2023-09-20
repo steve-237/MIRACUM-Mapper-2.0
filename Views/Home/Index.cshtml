@@ -49,16 +49,16 @@
                                             <a asp-controller="Mapping" asp-action="Index" asp-route-id="@element.Id" class="text-decoration-none title"><h5 class="name-field">@element.Name</h5></a><br>
                                             <p class="version">Version : <span class="version-field">@element.Version</span></p>
                                         </div>
-                                        <div class="custom-button-container">
-                                            <form asp-controller="Home" asp-action="EditModal" asp-route-id="@element.Id" method="post">
-                                                <input type="hidden" name="projectId" value="@element.Id" />
-                                                <button type="submit" class="btn edit-button">
-                                                    <i class="fa-solid fa-pen-to-square icon"></i>
-                                                </button>
-                                            </form>
-                                            <button class="btn delete-button custom-delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-id="@element.Id">
+                                        <div>
+
+                                            <button class="btn edit-button" data-toggle="modal" data-target="@("#editProjectModal-" + element.Id)">
+                                                <i class="fa-solid fa-pen-to-square icon"></i>
+                                            </button>
+                                            @await Html.PartialAsync("_EditProjectModal", element)
+                                            <button class="btn delete-button" data-toggle="modal" data-target="@("#ConfirmDeleteModal-" + element.Id)">
                                                 <i class="fas fa-trash icon"></i>
                                             </button>
+                                            @await Html.PartialAsync("_ConfirmDelete", element)
                                         </div>
                                     </div>
                                 </td>
@@ -71,7 +71,7 @@
     </div>
 </div>
 
-@await Html.PartialAsync("_ConfirmDelete")
+
 
 @section scripts {
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
@@ -114,91 +114,91 @@
                 table.search(searchText).draw();
             });
 
-            var elementIdToDelete;
-            var rowToDelete; // Select the parent line of this button
+            // var elementIdToDelete;
+            // var rowToDelete; // Select the parent line of this button
 
-            $('#elementTable').on('click', '.delete-button', function () {
-                elementIdToDelete = $(this).data('id');
-                rowToDelete = $('#elementTable').DataTable().row($(this).closest('tr'));
-            });
+            // $('#elementTable').on('click', '.delete-button', function () {
+            //     elementIdToDelete = $(this).data('id');
+            //     rowToDelete = $('#elementTable').DataTable().row($(this).closest('tr'));
+            // });
 
-            $('#confirmDeleteButton').on('click', function () {
+            // $('#confirmDeleteButton').on('click', function () {
 
-                if (elementIdToDelete) {
-                    $.ajax({
-                        url: 'Home/Delete/' + elementIdToDelete, // API URL
-                        type: 'DELETE',
-                        success: function (data) {
-                            console.log(data);
-                            if (data.success) {
-                                // Delete the line in DataTables
-                                rowToDelete.remove().draw();
-                                console.log('Element successfully deleted.');
-                                // Close the modal
-                                $("[data-dismiss=modal]").trigger({ type: "click" });
-                            } else {
-                                console.error('Element not found or deletion failed.');
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error deleting element: ' + error);
-                        }
-                    });
-                }
-            });
+            //     if (elementIdToDelete) {
+            //         $.ajax({
+            //             url: 'Home/Delete/' + elementIdToDelete, // API URL
+            //             type: 'DELETE',
+            //             success: function (data) {
+            //                 console.log(data);
+            //                 if (data.success) {
+            //                     // Delete the line in DataTables
+            //                     rowToDelete.remove().draw();
+            //                     console.log('Element successfully deleted.');
+            //                     // Close the modal
+            //                     $("[data-dismiss=modal]").trigger({ type: "click" });
+            //                 } else {
+            //                     console.error('Element not found or deletion failed.');
+            //                 }
+            //             },
+            //             error: function (xhr, status, error) {
+            //                 console.error('Error deleting element: ' + error);
+            //             }
+            //         });
+            //     }
+            // });
 
             var editedRow;
 
-            $('.edit-button').on('click', function () {
+            // $('.edit-button').on('click', function () {
 
-                editedRow = $('#elementTable').DataTable().row($(this).closest('tr'));
-                var projectId = $(this).data('id');
-                var projectName = $(this).data('name');
-                var projectVersion = $(this).data('version');
+            //     editedRow = $('#elementTable').DataTable().row($(this).closest('tr'));
+            //     var projectId = $(this).data('id');
+            //     var projectName = $(this).data('name');
+            //     var projectVersion = $(this).data('version');
 
-                $('#editId').val(projectId);
-                $('#editName').val(projectName);
-                $('#editVersion').val(projectVersion);
+            //     $('#editId').val(projectId);
+            //     $('#editName').val(projectName);
+            //     $('#editVersion').val(projectVersion);
 
-            });
+            // });
 
-            $('#saveButton').on('click', function () {
-                var projectId = $('#editId').val();
-                var editedName = $('#editName').val();
-                var editedVersion = $('#editVersion').val();
+            // $('#saveButton').on('click', function () {
+            //     var projectId = $('#editId').val();
+            //     var editedName = $('#editName').val();
+            //     var editedVersion = $('#editVersion').val();
 
-                var updatedData = {
-                    id: projectId,
-                    name: $('#editName').val(),
-                    version: $('#editVersion').val()
-                };
+            //     var updatedData = {
+            //         id: projectId,
+            //         name: $('#editName').val(),
+            //         version: $('#editVersion').val()
+            //     };
 
-                console.log(updatedData);
+            //     console.log(updatedData);
 
-                $.ajax({
-                    url: '/Home/Edit/',
-                    type: 'POST',
-                    data: JSON.stringify(updatedData),
-                    contentType: 'application/json',
-                    success: function (data) {
-                        if(data.success) {
-                            var rowIndex = editedRow.index(); // Retrieve the index of the modified line
+            //     $.ajax({
+            //         url: '/Home/Edit/',
+            //         type: 'POST',
+            //         data: JSON.stringify(updatedData),
+            //         contentType: 'application/json',
+            //         success: function (data) {
+            //             if(data.success) {
+            //                 var rowIndex = editedRow.index(); // Retrieve the index of the modified line
 
-                            table.cell(rowIndex, 0).node().querySelector('.name-field').innerText = data.editedProject.name; //Column 0: Name
-                            table.cell(rowIndex, 0).node().querySelector('.version-field').innerText = data.editedProject.version; // Column 0 : Version
+            //                 table.cell(rowIndex, 0).node().querySelector('.name-field').innerText = data.editedProject.name; //Column 0: Name
+            //                 table.cell(rowIndex, 0).node().querySelector('.version-field').innerText = data.editedProject.version; // Column 0 : Version
 
-                            console.log('Data updated successfully.', data);
-                            // Close the modal
-                            $("[data-dismiss=modal]").trigger({ type: "click" });
-                        } else {
-                            console.error('Error updating data.', data);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error updating data: ' + error);
-                    }
-                });
-            });
+            //                 console.log('Data updated successfully.', data);
+            //                 // Close the modal
+            //                 $("[data-dismiss=modal]").trigger({ type: "click" });
+            //             } else {
+            //                 console.error('Error updating data.', data);
+            //             }
+            //         },
+            //         error: function (xhr, status, error) {
+            //             console.error('Error updating data: ' + error);
+            //         }
+            //     });
+            // });
 
             var sourceFieldCount = 1;
 

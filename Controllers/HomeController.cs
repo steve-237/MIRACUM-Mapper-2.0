@@ -38,22 +38,28 @@ namespace MIRACUM_Mapper.Controllers
             return View("Index", newElements);
         }
 
-        [HttpDelete]
-        public IActionResult Delete(int id)
+        [HttpPost]
+        public IActionResult Delete(Project project)
         {
-            var elementToDelete = elements.FirstOrDefault(e => e.Id == id);
+            List<Project> updatedElements;
 
-            if (elementToDelete != null)
+            if (project != null)
             {
-                elements.Remove(elementToDelete);
-
-                var updatedElements = elements.Select(e => new { e.Id, e.Name, e.Version }).ToList();
-
-                return Json(new { success = true, message = "Element successfully deleted.", updatedElements });
+                var elementToDelete = elements.FirstOrDefault(e => e.Id == project.Id);
+                if (elementToDelete != null)
+                {
+                    if (elements.Remove(elementToDelete))
+                    {
+                        updatedElements = elements;
+                        return View("Index", updatedElements); //I have to redicted the view here to Index
+                    }
+                }
+                return PartialView("_ConfirmDelete", elements);
+                //return Json(new { success = true, message = "Element successfully deleted.", updatedElements });
             }
             else
             {
-                return Json(new { success = false, message = "Element not found." });
+                return PartialView("_ConfirmDelete", elements);
             }
         }
 
@@ -96,57 +102,36 @@ namespace MIRACUM_Mapper.Controllers
 
             var updatedProjects = GetAllProjects();
 
-            return View("Edit", existingProject);
+            return PartialView("EditProjectModal", existingProject); //I have to redicted the view here to Index
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Project project)
+        public IActionResult Edit(Project project)
         {
-            if (id != project.Id)
-            {
-                return NotFound();
-            }
 
             Project projectToUpdate = elements.Find(p => p.Id == project.Id);
+            List<Project> updatedElements;
 
             if (ModelState.IsValid)
             {
                 if (projectToUpdate != null)
                 {
-                    projectToUpdate.Id = project.Id;
-                    projectToUpdate.Name = project.Name;
-                    projectToUpdate.Version = project.Version;
-                    projectToUpdate.Description = project.Description;
-                    projectToUpdate.Sources = project.Sources;
-                    projectToUpdate.Targets = project.Targets;
+                    project.Id = projectToUpdate.Id;
+                    elements.Remove(projectToUpdate);
+                    updatedElements = elements;
+                    updatedElements.Add(project);
+                    Console.WriteLine(updatedElements);
+                    return View("Index", updatedElements); //I have to redicted the view here to Index
                 }
-                return View("index", elements);
+                return PartialView("EditProjectModal", project);
             }
 
-            return Json(new { success = false, message = "Data updated failed.", elements, projectToUpdate });
-        }
-
-        public IActionResult EditModal(int projectId)
-        {
-            var project = FindProjectById(projectId);
-
-            Project model = new Project
-            {
-                Id = project.Id,
-                Name = project.Name,
-                Version = project.Version,
-                Description = project.Description
-            };
-            return PartialView("_EditProjectModal", model);
+            return PartialView("EditProjectModal", project);
+            //return Json(new { success = false, message = "Data updated failed.", elements, projectToUpdate });
         }
 
         private Project FindProjectById(int id) => elements.FirstOrDefault(project => project.Id == id);
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
