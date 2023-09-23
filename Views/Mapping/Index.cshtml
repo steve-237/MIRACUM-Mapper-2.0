@@ -16,9 +16,36 @@
         </li>
     </ul>
 }
-
-<h6>@Model.Name</h6>
-<p>@Model.Version</p>
-<p>@Model.Description</p>
-<p>@Model.Sources</p>
-<p>@Model.Targets</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Url</th>
+            <th>Équivalent / Statut</th>
+            <th>Commentaire</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Sources != null && Model.Sources.Any() && Model.Targets != null && Model.Targets.Any())
+        {
+            @for (var i = 0; i < Model.Sources.Count && i < Model.Targets.Count; i++)
+            {
+                var source = Model.Sources[i];
+                var target = Model.Targets[i];
+                <tr>
+                    <td>@source.Name</td>
+                    <td>@source.Description</td>
+                    <td>@source.Url</td>
+                    <td>@(Model.DisplayMappingEquivalence ? "Equivalent" : Model.DisplayStatus ? "Statut" : "")</td>
+                    <td><input type="text" name="sourceComment" /></td>
+                    <td>@target.Name</td>
+                    <td>@target.Description</td>
+                    <td>@target.Url</td>
+                    <td>@(Model.DisplayMappingEquivalence ? "Equivalent" : Model.DisplayStatus ? "Statut" : "")</td>
+                    <td><input type="text" name="targetComment" /></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
