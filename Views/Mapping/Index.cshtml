@@ -16,36 +16,188 @@
         </li>
     </ul>
 }
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Url</th>
-            <th>Équivalent / Statut</th>
-            <th>Commentaire</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Sources != null && Model.Sources.Any() && Model.Targets != null && Model.Targets.Any())
-        {
-            @for (var i = 0; i < Model.Sources.Count && i < Model.Targets.Count; i++)
-            {
-                var source = Model.Sources[i];
-                var target = Model.Targets[i];
-                <tr>
-                    <td>@source.Name</td>
-                    <td>@source.Description</td>
-                    <td>@source.Url</td>
-                    <td>@(Model.DisplayMappingEquivalence ? "Equivalent" : Model.DisplayStatus ? "Statut" : "")</td>
-                    <td><input type="text" name="sourceComment" /></td>
-                    <td>@target.Name</td>
-                    <td>@target.Description</td>
-                    <td>@target.Url</td>
-                    <td>@(Model.DisplayMappingEquivalence ? "Equivalent" : Model.DisplayStatus ? "Statut" : "")</td>
-                    <td><input type="text" name="targetComment" /></td>
-                </tr>
-            }
+
+<div class="container-fluid h-100 d-flex flex-column justify-content-center align-items-center card mb-5">
+    <div class="container dashboard">
+        <div class="m-2"><h5>Mapping Table for the project : @Model.Name</h5></div>
+        <div class="row justify-content-center align-items-center">
+            <div class="col">
+                <div class="form-group d-flex m-3 justify-content-center">
+                    <div class="col-6 pr-1 position-relative">
+                        <div class="input-group">
+                            <input type="text" id="customSearchInput" class="form-control" placeholder="Search for a project...">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary" type="button" id="filterButton">Filter</button>
+                            </div>
+                            <select class="custom-select" id="columnFilter">
+                                <option value="">All Columns</option>
+                                @if (Model.Sources != null && Model.Sources.Any())
+                                {
+                                    for (int i = 1; i <= Model.Sources.Count; i++)
+                                    {
+                                        <option value="sourceName@i">Source @i Name</option>
+                                        <option value="sourceDescription@i">Source @i Description</option>
+                                    }
+                                }
+                                @if (Model.Targets != null && Model.Targets.Any())
+                                {
+                                    for (int i = 1; i <= Model.Targets.Count; i++)
+                                    {
+                                    <option value="targetName@i">Target @i Name</option>
+                                    <option value="targetDescription@i">Target @i Description</option>
+                                    }
+                                }
+                                @if (Model.DisplayStatus)
+                                {
+                                    <option value="status">Status</option>
+                                }
+                                @if (Model.DisplayMappingEquivalence)
+                                {
+                                    <option value="equivalence">Equivalence</option>
+                                }
+                            </select>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-fluid">
+                    <div class="table-responsive">
+                        <table id="mappingTable" class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll" onclick="toggleCheckboxes()"></th>
+                                    @if (Model.Sources != null && Model.Sources.Any())
+                                    {
+                                        @for (int i = 1; i <= Model.Sources.Count; i++)
+                                        {
+                                            <th>Source @i Name</th>
+                                            <th>Source @i Description</th>
+                                        }
+                                    }
+                                    @if (Model.Targets != null && Model.Targets.Any())
+                                    {
+                                        @for (int i = 1; i <= Model.Targets.Count; i++)
+                                        {
+                                            <th>Target @i Name</th>
+                                            <th>Target @i Description</th>
+                                        }
+                                    }
+                                    @if (Model.DisplayStatus)
+                                    {
+                                        <th>Status</th>
+                                    }
+                                    @if (Model.DisplayMappingEquivalence)
+                                    {
+                                        <th>Equivalence</th>
+                                    }
+                                    <th>Comment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="checkbox" name="selection" class="select-all" /></td>
+                                    @if (Model.Sources != null && Model.Sources.Any())
+                                    {
+                                        @foreach (var source in Model.Sources)
+                                        {
+                                            <td>@source.Name</td>
+                                            <td>@source.Description</td>
+                                        }
+                                    }
+                                    @if (Model.Targets != null && Model.Targets.Any())
+                                    {
+                                        @foreach (var target in Model.Targets)
+                                        {
+                                            <td>@target.Name</td>
+                                            <td>@target.Description</td>
+                                        }
+                                    }
+                                    @if (Model.DisplayStatus)
+                                    {
+                                        <td>Value</td>
+                                    }
+                                    @if (Model.DisplayMappingEquivalence)
+                                    {
+                                        <td>Value</td>
+                                    }
+                                    <td><input type="text" name="comment" class="form-control" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script>
+        function toggleCheckboxes() {
+            var checkboxes = document.querySelectorAll('.select-all');
+            var selectAllCheckbox = document.getElementById('selectAll');
+
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
         }
-    </tbody>
-</table>
+    </script>
+    <script>
+        $(document).ready(function () {
+            // DataTables
+            var table = $('#mappingTable').DataTable({
+                dom: 'rt<"d-flex" <"bottom col-md-3"> <"bottom col-md-3 m-2"l><"bottom col-md-2"i><"bottom col-md-3"p>><"clear">',
+                paging: true,
+                responsive: true,
+                lengthMenu: [3, 4, 10, 25, 50],
+                pageLength: 3,
+                searching: true,
+                pagingType: "full",
+                language: {
+                    "paginate": {
+                        "first": '<i class="fas fa-angle-double-left"></i>',
+                        "previous": '<i class="fas fa-angle-left"></i>',
+                        "next": '<i class="fas fa-angle-right"></i>',
+                        "last": '<i class="fas fa-angle-double-right"></i>',
+                        "page": "_PAGE_"
+                    },
+                    "lengthMenu": "Items per page : _MENU_",
+                    "info": "_START_ - _END_ of _TOTAL_",
+                    "emptyTable": "No data available in the table",
+                    "infoEmpty": "0 - 0 of 0",
+                    "infoFiltered": ""
+                }
+            });
+
+            // Customised DataTables search
+            $("#customSearchButton").on("click", function () {
+                var searchText = $("#customSearchInput").val().toLowerCase();
+                table.search(searchText).draw();
+            });
+
+            // Update the search each time you enter data to trigger it in real time
+            $("#customSearchInput").on("input", function () {
+                var searchText = $(this).val().toLowerCase();
+                table.search(searchText).draw();
+            });
+
+            $('#columnFilter').change(function () {
+                var selectedColumn = $(this).val();
+                var searchText = $('#customSearchInput').val().toLowerCase();
+                var columnIndex = table.column(selectedColumn + ':name').index();
+                table.column(columnIndex).search(searchText).draw();
+            });
+
+            $('#customSearchInput').on('input', function () {
+                var selectedColumn = $('#columnFilter').val();
+                var searchText = $(this).val().toLowerCase();
+                var columnIndex = table.column(selectedColumn + ':name').index();
+                table.column(columnIndex).search(searchText).draw();
+            });
+        });
+    </script>
+}
