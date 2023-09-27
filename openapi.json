@@ -1,0 +1,304 @@
+{
+    "openapi": "3.0.0",
+    "servers": [],
+    "info": {
+        "description": "",
+        "version": "0.1",
+        "title": "MIRACUM Mapping Tool Backend",
+        "termsOfService": "",
+        "contact": {
+            "email": ""
+        }
+    },
+    "tags": [],
+    "paths": {
+        "/project": {
+            "get": {
+                "summary": "Get all projects",
+                "description": "",
+                "operationId": "getProjects",
+                "parameters": [],
+                "responses": {
+                    "default": {
+                        "description": "Default response"
+                    }
+                },
+                "security": []
+            },
+            "post": {
+                "summary": "Create a new project",
+                "description": "",
+                "parameters": [],
+                "operationId": "addProject",
+                "responses": {
+                    "default": {
+                        "description": "Default response"
+                    }
+                },
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{project_id}/mapping": {
+            "get": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "operationId": "getAllMappings",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Mapping"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "x-temp": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "operationId": "addMapping",
+                "responses": {
+                    "default": {
+                        "description": "Default response"
+                    }
+                }
+            },
+            "post": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "operationId": "updateMapping",
+                "responses": {
+                    "default": {
+                        "description": "Default response"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "operationId": "deleteMapping",
+                "responses": {
+                    "default": {
+                        "description": "Default response"
+                    }
+                }
+            }
+        },
+        "/project/{project_id}/mapping/{mapping_id}": {
+            "get": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "operationId": "getMappingByID",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Mapping"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "operationId": "updateMapping",
+                "responses": {
+                    "default": {
+                        "description": "Default response"
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Mapping"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "operationId": "deleteMapping",
+                "responses": {
+                    "default": {
+                        "description": "Default response"
+                    }
+                }
+            }
+        },
+        "/project/{project_id}": {
+            "get": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "operationId": "getProject",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Project": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "sources": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "targets": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Mapping": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "equivalence": {
+                        "type": "string"
+                    },
+                    "sources": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "key": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "targets": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "key": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "requestBodies": {
+            "Pet": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Pet"
+                        }
+                    },
+                    "application/xml": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Pet"
+                        }
+                    }
+                },
+                "description": "Pet object that needs to be added to the store",
+                "required": true
+            },
+            "UserArray": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "description": "List of user object",
+                "required": true
+            }
+        },
+        "securitySchemes": {},
+        "links": {},
+        "callbacks": {}
+    },
+    "security": []
+}

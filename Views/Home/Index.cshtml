@@ -1,8 +1,321 @@
-﻿@{
+﻿@model List<Project>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@section NavBarItems {
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" type="button" href="" data-toggle="modal" data-target="#createProjectModal">New Project</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Import Project</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Export Project</a>
+        </li>
+    </ul>
+}
+
+@await Html.PartialAsync("_CreateProjectModal")
+
+<div class="container-fluid h-100 d-flex flex-column justify-content-center align-items-center card mb-5">
+    <div class="container dashboard">
+        <div class="row justify-content-center align-items-center">
+            <div class="col">
+                <div class="form-group d-flex m-3 justify-content-center">
+                    <div class="col-6 pr-1 position-relative">
+                        <input type="text" id="customSearchInput" class="form-control flex-grow-1" placeholder="Search for a project...">
+                        <span class="search-icon">
+                            <i class="fas fa-search icon"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <table id="elementTable" class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Created Projects</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var element in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex justify-content-between align-items-center custom-div">
+                                        <div class="title">
+                                            <a asp-controller="Mapping" asp-action="Index" asp-route-id="@element.Id" class="text-decoration-none title"><h5 class="name-field">@element.Name</h5></a><br>
+                                            <p class="version">Version : <span class="version-field">@element.Version</span></p>
+                                        </div>
+                                        <div>
+                                            <a type="button" class="btn edit-button" asp-controller="Home" asp-action="Edit" asp-route-id="@element.Id">
+                                                <i class="fa-solid fa-pen-to-square icon"></i>
+                                            </a>
+                                            <button class="btn delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-id="@element.Id">
+                                                <i class="fas fa-trash icon"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+@await Html.PartialAsync("_ConfirmDelete")
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            // DataTables
+            var table = $('#elementTable').DataTable({
+                dom: 'rt<"d-flex" <"bottom col-md-3"> <"bottom col-md-3 m-2"l><"bottom col-md-2"i><"bottom col-md-3"p>><"clear">',
+                paging: true,
+                responsive: true,
+                lengthMenu: [3, 4, 10, 25, 50],
+                pageLength: 3,
+                searching: true,
+                pagingType: "full",
+                language: {
+                    "paginate": {
+                        "first": '<i class="fas fa-angle-double-left"></i>',
+                        "previous": '<i class="fas fa-angle-left"></i>',
+                        "next": '<i class="fas fa-angle-right"></i>',
+                        "last": '<i class="fas fa-angle-double-right"></i>',
+                        "page": "_PAGE_"
+                    },
+                    "lengthMenu": "Items per page : _MENU_",
+                    "info": "_START_ - _END_ of _TOTAL_",
+                    "emptyTable": "No data available in the table",
+                    "infoEmpty": "0 - 0 of 0",
+                    "infoFiltered": ""
+                }
+            });
+
+            // Customised DataTables search
+            $("#customSearchButton").on("click", function () {
+                var searchText = $("#customSearchInput").val().toLowerCase();
+                table.search(searchText).draw();
+            });
+
+            // Update the search each time you enter data to trigger it in real time
+            $("#customSearchInput").on("input", function () {
+                var searchText = $(this).val().toLowerCase();
+                table.search(searchText).draw();
+            });
+
+            var elementIdToDelete;
+            var rowToDelete; // Select the parent line of this button
+
+            $('#elementTable').on('click', '.delete-button', function () {
+                elementIdToDelete = $(this).data('id');
+                rowToDelete = $('#elementTable').DataTable().row($(this).closest('tr'));
+            });
+
+            $('#confirmDeleteButton').on('click', function () {
+
+                if (elementIdToDelete) {
+                    $.ajax({
+                        url: 'Home/Delete/' + elementIdToDelete, // API URL
+                        type: 'DELETE',
+                        success: function (data) {
+                            console.log(data);
+                            if (data.success) {
+                                // Delete the line in DataTables
+                                rowToDelete.remove().draw();
+                                console.log('Element successfully deleted.');
+                                // Close the modal
+                                $("[data-dismiss=modal]").trigger({ type: "click" });
+                            } else {
+                                console.error('Element not found or deletion failed.');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error deleting element: ' + error);
+                        }
+                    });
+                }
+            });
+
+            var editedRow;
+
+            $('.edit-button').on('click', function () {
+
+                editedRow = $('#elementTable').DataTable().row($(this).closest('tr'));
+                var projectId = $(this).data('id');
+                var projectName = $(this).data('name');
+                var projectVersion = $(this).data('version');
+
+                $('#editId').val(projectId);
+                $('#editName').val(projectName);
+                $('#editVersion').val(projectVersion);
+
+            });
+
+            $('#saveButton').on('click', function () {
+                var projectId = $('#editId').val();
+                var editedName = $('#editName').val();
+                var editedVersion = $('#editVersion').val();
+
+                var updatedData = {
+                    id: projectId,
+                    name: $('#editName').val(),
+                    version: $('#editVersion').val()
+                };
+
+                console.log(updatedData);
+
+                $.ajax({
+                    url: '/Home/Edit/',
+                    type: 'POST',
+                    data: JSON.stringify(updatedData),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        if(data.success) {
+                            var rowIndex = editedRow.index(); // Retrieve the index of the modified line
+
+                            table.cell(rowIndex, 0).node().querySelector('.name-field').innerText = data.editedProject.name; //Column 0: Name
+                            table.cell(rowIndex, 0).node().querySelector('.version-field').innerText = data.editedProject.version; // Column 0 : Version
+
+                            console.log('Data updated successfully.', data);
+                            // Close the modal
+                            $("[data-dismiss=modal]").trigger({ type: "click" });
+                        } else {
+                            console.error('Error updating data.', data);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error updating data: ' + error);
+                    }
+                });
+            });
+
+            var sourceFieldCount = 1;
+
+            $("#addSourceField").click(function () {
+                if (sourceFieldCount < 5) {
+                    var formGroup = $(this).closest('.form-row');
+                    var newFormGroup = formGroup.clone();
+                    newFormGroup.find("select").val("");
+                    newFormGroup.find(".add-button").remove();
+                    newFormGroup.find(".import-button").remove();
+                    newFormGroup.find("select").addClass('mt-2');
+
+                    var newId = "selectSource" + sourceFieldCount;
+                    console.log(newId);
+
+                    newFormGroup.attr("id", newId);
+                    newFormGroup.find("select").attr("id", "projectSelectSource" + sourceFieldCount);
+                    newFormGroup.find("select").attr("name", "projectSelectSource" + sourceFieldCount);
+
+                    var removeButton = $("<button class='btn btn-danger remove-button mt-2' style='margin-left: 22px;' type = 'button' > <i class='fas fa-minus' > </i></button > ");
+                    var importButton = $("<button class='btn import-button mt-2 ml-1' type='button'><i class='fas fa-upload'></i></button>");
+                    
+                    removeButton.click(function () {
+                        newFormGroup.remove();
+                        sourceFieldCount--;
+                    });
+
+                    newFormGroup.find('.col-md-3').append(removeButton).append(importButton);
+
+                    formGroup.after(newFormGroup);
+                    sourceFieldCount++;
+                    console.log(sourceFieldCount);
+                } else {
+                    $("#alertMessage").fadeIn(500);
+                    setTimeout(function () {
+                        $("#alertMessage").fadeOut(500);
+                    }, 3000);
+                }
+            });
+
+            var targetFieldCount = 1;
+
+            $("#addTargetField").click(function () {
+                if (targetFieldCount < 5) {
+                    var formGroup = $(this).closest('.form-row');
+                    var newFormGroup = formGroup.clone();
+                    newFormGroup.find("select").val("");
+                    newFormGroup.find(".add-button").remove();
+                    newFormGroup.find(".import-button").remove();
+                    newFormGroup.find("select").addClass('mt-2');
+
+                    var newId = "selectTarget" + targetFieldCount;
+                    console.log(newId);
+
+                    newFormGroup.attr("id", newId);
+                    newFormGroup.find("select").attr("id", "projectSelectTarget" + targetFieldCount);
+                    newFormGroup.find("select").attr("name", "projectSelectTarget" + targetFieldCount);
+
+                    var removeButton = $("<button class='btn btn-danger remove-button mt-2' style='margin-left: 22px;' type = 'button' > <i class='fas fa-minus' > </i></button > ");
+                    var importButton = $("<button class='btn import-button mt-2 ml-1' type='button'><i class='fas fa-upload'></i></button>");
+
+                    removeButton.click(function () {
+                        newFormGroup.remove();
+                        targetFieldCount--;
+                    });
+
+                    newFormGroup.find('.col-md-3').append(removeButton).append(importButton);
+
+                    formGroup.after(newFormGroup);
+                    targetFieldCount++;
+                } else {
+                    $("#alertMessage").fadeIn(500);
+                    setTimeout(function () {
+                        $("#alertMessage").fadeOut(500);
+                    }, 3000);
+                }
+            });
+
+            $("#saveProjectButton").click(function () {
+
+                var Sources = [];
+                var Targets = [];
+
+                var maxElements = 5;
+
+                for (var i = 0; i < maxElements; i++) {
+
+                    var selectSourceId = "projectSelectSource" + i;
+                    var selectTargetId = "projectSelectTarget" + i;
+
+                    var selectSourceValue = $("select[name='" + selectSourceId + "']").val();
+                    var selectTargetValue = $("select[name='" + selectTargetId + "']").val();
+
+                    if (selectSourceValue !== undefined) {
+                        Sources.push(selectSourceValue);
+                    }
+
+                    if (selectTargetValue !== undefined) {
+                        Targets.push(selectTargetValue);
+                    }
+                }
+
+                var formData = {
+                    Name: $("#projectName").val(),
+                    Version: $("#projectVersion").val(),
+                    Description: $("#projectDescription").val(),
+                    Sources: Sources,
+                    Targets: Targets
+                };
+
+                console.log(formData);
+
+                $.ajax({
+                    data: formData, 
+                    success: function (response) {
+                    },
+                    error: function (error) {
+                    }
+                });
+            });
+        });
+    </script>
+}
