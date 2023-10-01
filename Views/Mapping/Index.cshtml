@@ -18,9 +18,9 @@
 }
 
 <div class="container-fluid h-100 d-flex flex-column justify-content-center align-items-center card mb-5">
-    <div class="container dashboard">
+    <div class="container-fluid dashboard">
         <div class="m-2"><h5>Mapping Table for the project : @Model.Name</h5></div>
-        <div class="row justify-content-center align-items-center">
+        <div class="justify-content-center align-items-center">
             <div class="col">
                 <div class="form-group d-flex m-3 justify-content-center">
                     <div class="col-6 pr-1 position-relative">
@@ -43,8 +43,8 @@
                                 {
                                     for (int i = 1; i <= Model.Targets.Count; i++)
                                     {
-                                    <option value="targetName@i">Target @i Name</option>
-                                    <option value="targetDescription@i">Target @i Description</option>
+                                        <option value="targetName@i">Target @i Name</option>
+                                        <option value="targetDescription@i">Target @i Description</option>
                                     }
                                 }
                                 @if (Model.DisplayStatus)
@@ -57,81 +57,79 @@
                                 }
                             </select>
                         </div>
-                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="container-fluid">
-                    <div class="table-responsive">
-                        <table id="mappingTable" class="table table-bordered">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th><input type="checkbox" id="selectAll" onclick="toggleCheckboxes()"></th>
-                                    @if (Model.Sources != null && Model.Sources.Any())
+            <div class="container-fluid">
+                <div class="table-responsive">
+                    <table id="mappingTable" class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" onclick="toggleCheckboxes()"></th>
+                                @if (Model.Sources != null && Model.Sources.Any())
+                                {
+                                    @for (int i = 1; i <= Model.Sources.Count; i++)
                                     {
-                                        @for (int i = 1; i <= Model.Sources.Count; i++)
-                                        {
-                                            <th>Source @i Name</th>
-                                            <th>Source @i Description</th>
-                                        }
+                                        <th>Source @i Name</th>
+                                        <th>Source @i Description</th>
                                     }
-                                    @if (Model.Targets != null && Model.Targets.Any())
+                                }
+                                @if (Model.Targets != null && Model.Targets.Any())
+                                {
+                                    @for (int i = 1; i <= Model.Targets.Count; i++)
                                     {
-                                        @for (int i = 1; i <= Model.Targets.Count; i++)
-                                        {
-                                            <th>Target @i Name</th>
-                                            <th>Target @i Description</th>
-                                        }
+                                        <th>Target @i Name</th>
+                                        <th>Target @i Description</th>
                                     }
-                                    @if (Model.DisplayStatus)
+                                }
+                                @if (Model.DisplayStatus)
+                                {
+                                    <th>Status</th>
+                                }
+                                @if (Model.DisplayMappingEquivalence)
+                                {
+                                    <th>Equivalence</th>
+                                }
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="checkbox" name="selection" class="select-all" /></td>
+                                @if (Model.Sources != null && Model.Sources.Any())
+                                {
+                                    @foreach (var source in Model.Sources)
                                     {
-                                        <th>Status</th>
+                                        <td>@source.Name</td>
+                                        <td>@source.Description</td>
                                     }
-                                    @if (Model.DisplayMappingEquivalence)
+                                }
+                                @if (Model.Targets != null && Model.Targets.Any())
+                                {
+                                    @foreach (var target in Model.Targets)
                                     {
-                                        <th>Equivalence</th>
+                                        <td>@target.Name</td>
+                                        <td>@target.Description</td>
                                     }
-                                    <th>Comment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="checkbox" name="selection" class="select-all" /></td>
-                                    @if (Model.Sources != null && Model.Sources.Any())
-                                    {
-                                        @foreach (var source in Model.Sources)
-                                        {
-                                            <td>@source.Name</td>
-                                            <td>@source.Description</td>
-                                        }
-                                    }
-                                    @if (Model.Targets != null && Model.Targets.Any())
-                                    {
-                                        @foreach (var target in Model.Targets)
-                                        {
-                                            <td>@target.Name</td>
-                                            <td>@target.Description</td>
-                                        }
-                                    }
-                                    @if (Model.DisplayStatus)
-                                    {
-                                        <td>Value</td>
-                                    }
-                                    @if (Model.DisplayMappingEquivalence)
-                                    {
-                                        <td>Value</td>
-                                    }
-                                    <td><input type="text" name="comment" class="form-control" /></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                }
+                                @if (Model.DisplayStatus)
+                                {
+                                    <td>Value</td>
+                                }
+                                @if (Model.DisplayMappingEquivalence)
+                                {
+                                    <td>Value</td>
+                                }
+                                <td><input type="text" name="comment" class="form-control" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 
 @section scripts {

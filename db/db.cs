@@ -9,6 +9,8 @@ namespace MIRACUM_Mapper.db
             new Source { Id = 1, Name = "ICD-10", Description = "Description source 1", Url = "Url 1"},
             new Source { Id = 2, Name = "UMLS", Description = "Description source 2", Url = "Url 2"},
             new Source { Id = 3, Name = "LONIC", Description = "Description source 3", Url = "Url 3"},
+            new Source { Id = 4, Name = "UMLS", Description = "Description source 4", Url = "Url 4"},
+            new Source { Id = 5, Name = "LONIC", Description = "Description source 5", Url = "Url 5"},
         };
 
         public static List<Target> targets = new List<Target>
