@@ -63,7 +63,7 @@ header, footer {
 }
 
 table.dataTable.no-footer{
-    border-bottom: 5px solid white;
+    border-bottom: none;
 }
 
 #elementTable_wrapper.dataTables_wrapper {
@@ -173,7 +173,22 @@ label {
 }
 
 #mappingTable th, #mappingTable td {
-    border: 1px solid #000;
+    border: 1px solid #898d8f;
     padding: 8px;
     text-align: left;
+}
+
+.custom-thead-dark {
+    background-color: #636E72;
+    color: ghostwhite;
+}
+
+.table-panel {
+    background-color: #D9D9D9;
+}
+
+//panel
+
+.panel-background {
+    background-color: #D9D9D9;
 }

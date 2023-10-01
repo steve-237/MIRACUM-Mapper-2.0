@@ -18,9 +18,9 @@
 }
 
 <div class="container-fluid h-100 d-flex flex-column justify-content-center align-items-center card mb-5">
-    <div class="container-fluid dashboard">
-        <div class="m-2"><h5>Mapping Table for the project : @Model.Name</h5></div>
-        <div class="justify-content-center align-items-center">
+    <div class="container-fluid">
+        <div class="mt-3 mb-3"><h4>Mapping Table : @Model.Name</h4></div>
+        <div class="justify-content-center align-items-center table-panel pt-2">
             <div class="col">
                 <div class="form-group d-flex m-3 justify-content-center">
                     <div class="col-6 pr-1 position-relative">
@@ -64,7 +64,7 @@
             <div class="container-fluid">
                 <div class="table-responsive">
                     <table id="mappingTable" class="table">
-                        <thead class="thead-dark">
+                        <thead class="custom-thead-dark">
                             <tr>
                                 <th><input type="checkbox" id="selectAll" onclick="toggleCheckboxes()"></th>
                                 @if (Model.Sources != null && Model.Sources.Any())
@@ -129,8 +129,103 @@
             </div>
         </div>
     </div>
-</div>
 
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body p-3" style="background-color: #D9D9D9;">
+                        <h5>@Model.Name</h5>
+                        <p>Version : @Model.Version</p>
+                        <p>Description : @Model.Description</p>
+                        <p>Number of Sources : @Model.Sources.Count</p>
+                        <p>Number of Targets : @Model.Targets.Count</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body p-3" style="background-color: #D9D9D9;">
+
+                        <h5>Selected Line Properties</h5>
+
+                        <div class="accordion" id="sourcesTargetsAccordion">
+                            <div class="card">
+                                <div class="card-header" id="sourcesHeader">
+                                    <h6 class="mb-0 cursor">
+                                        <a data-toggle="collapse" data-target="#sourcesCollapse" aria-expanded="true" aria-controls="sourcesCollapse">
+                                            Sources
+                                        </a>
+                                    </h6>
+                                </div>
+
+                                <div id="sourcesCollapse" class="collapse" aria-labelledby="sourcesHeader" data-parent="#sourcesTargetsAccordion">
+                                    <div class="card-body bg-light">
+                                        <div class="accordion" id="sourceAccordion">
+                                            <div class="card">
+                                                <div class="card-header" id="sourceHeader">
+                                                    <h6 class="mb-0 cursor">
+                                                        <a data-toggle="collapse" data-target="#sourceCollapse" aria-expanded="true" aria-controls="sourceCollapse">
+                                                            Source 1
+                                                        </a>
+                                                    </h6>
+                                                </div>
+
+                                                <div id="sourceCollapse" class="collapse" aria-labelledby="sourceHeader" data-parent="#sourceAccordion">
+                                                    <div class="card-body bg-light">
+                                                        <p>Name : Property of Source 1</p>
+                                                        <p>Description : Property of Source 1</p>
+                                                        <p>URL : Property of Source 1</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="targetsHeader">
+                                    <h6 class="mb-0 cursor">
+                                        <a data-toggle="collapse" data-target="#targetsCollapse" aria-expanded="true" aria-controls="targetsCollapse">
+                                            Targets
+                                        </a>
+                                    </h6>
+                                </div>
+
+                                <div id="targetsCollapse" class="collapse" aria-labelledby="targetsHeader" data-parent="#sourcesTargetsAccordion">
+                                    <div class="card-body bg-light">
+                                        <div class="accordion" id="targetAccordion">
+                                            <div class="card">
+                                                <div class="card-header" id="targetHeader">
+                                                    <h6 class="mb-0 cursor">
+                                                        <a data-toggle="collapse" data-target="#targetCollapse" aria-expanded="true" aria-controls="targetCollapse">
+                                                            Target 1
+                                                        </a>
+                                                    </h6>
+                                                </div>
+
+                                                <div id="targetCollapse" class="collapse" aria-labelledby="targetHeader" data-parent="#targetAccordion">
+                                                    <div class="card-body bg-light">
+                                                        <p>Name : Property of Target 1</p>
+                                                        <p>Description : Property of Target 1</p>
+                                                        <p>URL : Property of Target 1</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts {
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
@@ -148,7 +243,7 @@
         $(document).ready(function () {
             // DataTables
             var table = $('#mappingTable').DataTable({
-                dom: 'rt<"d-flex" <"bottom col-md-3"> <"bottom col-md-3 m-2"l><"bottom col-md-2"i><"bottom col-md-3"p>><"clear">',
+                dom: 'rt<"d-flex" <"bottom col-md-7 mr-5"> <"bottom p-0 m-2"l><"bottom ml-5 p-0"i><"bottom ml-5 p-0"p>><"clear">',
                 paging: true,
                 responsive: true,
                 lengthMenu: [3, 4, 10, 25, 50],
