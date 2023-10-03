@@ -31,20 +31,20 @@
                             </div>
                             <select class="custom-select" id="columnFilter">
                                 <option value="">All Columns</option>
-                                @if (Model.Sources != null && Model.Sources.Any())
+                                @if (Model.Mappings.First().Sources != null && Model.Mappings.First().Sources.Any())
                                 {
-                                    for (int i = 1; i <= Model.Sources.Count; i++)
+                                    @foreach (var source in Model.Mappings.First().Sources)
                                     {
-                                        <option value="sourceName@i">Source @i Name</option>
-                                        <option value="sourceDescription@i">Source @i Description</option>
+                                        <option value="@source.Name Code">@source.Name Code</option>
+                                        <option value="@source.Name Meaning">@source.Name Meaning</option>
                                     }
                                 }
-                                @if (Model.Targets != null && Model.Targets.Any())
+                                @if (Model.Mappings.First().Targets != null && Model.Mappings.First().Targets.Any())
                                 {
-                                    for (int i = 1; i <= Model.Targets.Count; i++)
+                                    @foreach (var target in Model.Mappings.First().Targets)
                                     {
-                                        <option value="targetName@i">Target @i Name</option>
-                                        <option value="targetDescription@i">Target @i Description</option>
+                                        <option value="@target.Name Code">@target.Name Code</option>
+                                        <option value="">@target.Name Meaning</option>
                                     }
                                 }
                                 @if (Model.DisplayStatus)
@@ -55,6 +55,7 @@
                                 {
                                     <option value="equivalence">Equivalence</option>
                                 }
+                                <option value="comment">Comment</option>
                             </select>
                         </div>
                     </div>
@@ -67,21 +68,16 @@
                         <thead class="custom-thead-dark">
                             <tr>
                                 <th><input type="checkbox" id="selectAll" onclick="toggleCheckboxes()"></th>
-                                @if (Model.Sources != null && Model.Sources.Any())
+                                @foreach (var source in Model.Mappings.First().Sources)
                                 {
-                                    @for (int i = 1; i <= Model.Sources.Count; i++)
-                                    {
-                                        <th>Source @i Name</th>
-                                        <th>Source @i Description</th>
-                                    }
+                                    <td>@source.Name Code (Source)</td>
+                                    <td>@source.Name Meaning (Source)</td>
                                 }
-                                @if (Model.Targets != null && Model.Targets.Any())
+
+                                @foreach (var target in Model.Mappings.First().Targets)
                                 {
-                                    @for (int i = 1; i <= Model.Targets.Count; i++)
-                                    {
-                                        <th>Target @i Name</th>
-                                        <th>Target @i Description</th>
-                                    }
+                                    <td>@target.Name Code (Target)</td>
+                                    <td>@target.Name Meaning (Target)</td>
                                 }
                                 @if (Model.DisplayStatus)
                                 {
@@ -95,36 +91,28 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><input type="checkbox" name="selection" class="select-all" /></td>
-                                @if (Model.Sources != null && Model.Sources.Any())
-                                {
-                                    @foreach (var source in Model.Sources)
+                            @foreach (var mapping in Model.Mappings)
+                            {
+                                <tr>
+                                    <td><input type="checkbox" name="selection" class="select-all"/></td>
+                                    <td>@mapping.Sources.First().Concept.Code</td>
+                                    <td>@mapping.Sources.First().Concept.Meaning</td>
+                                    <td>@mapping.Targets.First().Concept.Code</td>
+                                    <td>@mapping.Targets.First().Concept.Meaning</td>
+                                    @if (Model.DisplayMappingEquivalence)
                                     {
-                                        <td>@source.Name</td>
-                                        <td>@source.Description</td>
+                                        <td>@mapping.Equivalence</td>
                                     }
-                                }
-                                @if (Model.Targets != null && Model.Targets.Any())
-                                {
-                                    @foreach (var target in Model.Targets)
+                                    @if (Model.DisplayStatus)
                                     {
-                                        <td>@target.Name</td>
-                                        <td>@target.Description</td>
+                                        <td>@mapping.Status</td>
                                     }
-                                }
-                                @if (Model.DisplayStatus)
-                                {
-                                    <td>Value</td>
-                                }
-                                @if (Model.DisplayMappingEquivalence)
-                                {
-                                    <td>Value</td>
-                                }
-                                <td><p>Some comment !</p></td>
-                            </tr>
+                                    <td>@mapping.Comment</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>
@@ -138,8 +126,8 @@
                         <h5>@Model.Name</h5>
                         <p>Version : @Model.Version</p>
                         <p>Description : @Model.Description</p>
-                        <p>Number of Sources : @Model.Sources.Count</p>
-                        <p>Number of Targets : @Model.Targets.Count</p>
+                        <p>Number of Sources : @Model.Mappings.First().Sources.Count</p>
+                        <p>Number of Targets : @Model.Mappings.First().Targets.Count</p>
                     </div>
                 </div>
             </div>
