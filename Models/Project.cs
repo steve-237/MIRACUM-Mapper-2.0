@@ -10,5 +10,12 @@
         public List<Target>? Targets { get; set; }
         public bool DisplayMappingEquivalence { get; set; }
         public bool DisplayStatus { get; set; }
+
+        public List<Mapping> Mappings { get; set; }
+
+        public Project()
+        {
+            Mappings = new List<Mapping>();
+        }
     }
 }

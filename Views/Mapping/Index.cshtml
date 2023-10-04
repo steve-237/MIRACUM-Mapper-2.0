@@ -17,8 +17,268 @@
     </ul>
 }
 
-<h6>@Model.Name</h6>
-<p>@Model.Version</p>
-<p>@Model.Description</p>
-<p>@Model.Sources</p>
-<p>@Model.Targets</p>
+<div class="container-fluid h-100 d-flex flex-column justify-content-center align-items-center card mb-5">
+    <div class="container-fluid">
+        <div class="mt-3 mb-3"><h4>Mapping Table : @Model.Name</h4></div>
+        <div class="justify-content-center align-items-center table-panel pt-2">
+            <div class="col">
+                <div class="form-group d-flex m-3 justify-content-center">
+                    <div class="col-6 pr-1 position-relative">
+                        <div class="input-group">
+                            <input type="text" id="customSearchInput" class="form-control" placeholder="Search for a project...">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary" type="button" id="filterButton">Filter</button>
+                            </div>
+                            <select class="custom-select" id="columnFilter">
+                                <option value="">All Columns</option>
+                                @if (Model.Mappings.First().Sources != null && Model.Mappings.First().Sources.Any())
+                                {
+                                    @foreach (var source in Model.Mappings.First().Sources)
+                                    {
+                                        <option value="@source.Name Code">@source.Name Code</option>
+                                        <option value="@source.Name Meaning">@source.Name Meaning</option>
+                                    }
+                                }
+                                @if (Model.Mappings.First().Targets != null && Model.Mappings.First().Targets.Any())
+                                {
+                                    @foreach (var target in Model.Mappings.First().Targets)
+                                    {
+                                        <option value="@target.Name Code">@target.Name Code</option>
+                                        <option value="">@target.Name Meaning</option>
+                                    }
+                                }
+                                @if (Model.DisplayStatus)
+                                {
+                                    <option value="status">Status</option>
+                                }
+                                @if (Model.DisplayMappingEquivalence)
+                                {
+                                    <option value="equivalence">Equivalence</option>
+                                }
+                                <option value="comment">Comment</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="table-responsive">
+                    <table id="mappingTable" class="table">
+                        <thead class="custom-thead-dark">
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" onclick="toggleCheckboxes()"></th>
+                                @foreach (var source in Model.Mappings.First().Sources)
+                                {
+                                    <td>@source.Name Code (Source)</td>
+                                    <td>@source.Name Meaning (Source)</td>
+                                }
+
+                                @foreach (var target in Model.Mappings.First().Targets)
+                                {
+                                    <td>@target.Name Code (Target)</td>
+                                    <td>@target.Name Meaning (Target)</td>
+                                }
+                                @if (Model.DisplayStatus)
+                                {
+                                    <th>Status</th>
+                                }
+                                @if (Model.DisplayMappingEquivalence)
+                                {
+                                    <th>Equivalence</th>
+                                }
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var mapping in Model.Mappings)
+                            {
+                                <tr>
+                                    <td><input type="checkbox" name="selection" class="select-all"/></td>
+                                    <td>@mapping.Sources.First().Concept.Code</td>
+                                    <td>@mapping.Sources.First().Concept.Meaning</td>
+                                    <td>@mapping.Targets.First().Concept.Code</td>
+                                    <td>@mapping.Targets.First().Concept.Meaning</td>
+                                    @if (Model.DisplayMappingEquivalence)
+                                    {
+                                        <td>@mapping.Equivalence</td>
+                                    }
+                                    @if (Model.DisplayStatus)
+                                    {
+                                        <td>@mapping.Status</td>
+                                    }
+                                    <td>@mapping.Comment</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body p-3" style="background-color: #D9D9D9;">
+                        <h5>@Model.Name</h5>
+                        <p>Version : @Model.Version</p>
+                        <p>Description : @Model.Description</p>
+                        <p>Number of Sources : @Model.Mappings.First().Sources.Count</p>
+                        <p>Number of Targets : @Model.Mappings.First().Targets.Count</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body p-3" style="background-color: #D9D9D9;">
+
+                        <h5>Selected Line Properties</h5>
+
+                        <div class="accordion" id="sourcesTargetsAccordion">
+                            <div class="card">
+                                <div class="card-header" id="sourcesHeader">
+                                    <h6 class="mb-0 cursor">
+                                        <a data-toggle="collapse" data-target="#sourcesCollapse" aria-expanded="true" aria-controls="sourcesCollapse">
+                                            Sources
+                                        </a>
+                                    </h6>
+                                </div>
+
+                                <div id="sourcesCollapse" class="collapse" aria-labelledby="sourcesHeader" data-parent="#sourcesTargetsAccordion">
+                                    <div class="card-body bg-light">
+                                        <div class="accordion" id="sourceAccordion">
+                                            <div class="card">
+                                                <div class="card-header" id="sourceHeader">
+                                                    <h6 class="mb-0 cursor">
+                                                        <a data-toggle="collapse" data-target="#sourceCollapse" aria-expanded="true" aria-controls="sourceCollapse">
+                                                            Source 1
+                                                        </a>
+                                                    </h6>
+                                                </div>
+
+                                                <div id="sourceCollapse" class="collapse" aria-labelledby="sourceHeader" data-parent="#sourceAccordion">
+                                                    <div class="card-body bg-light">
+                                                        <p>Name : Property of Source 1</p>
+                                                        <p>Description : Property of Source 1</p>
+                                                        <p>URL : Property of Source 1</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="targetsHeader">
+                                    <h6 class="mb-0 cursor">
+                                        <a data-toggle="collapse" data-target="#targetsCollapse" aria-expanded="true" aria-controls="targetsCollapse">
+                                            Targets
+                                        </a>
+                                    </h6>
+                                </div>
+
+                                <div id="targetsCollapse" class="collapse" aria-labelledby="targetsHeader" data-parent="#sourcesTargetsAccordion">
+                                    <div class="card-body bg-light">
+                                        <div class="accordion" id="targetAccordion">
+                                            <div class="card">
+                                                <div class="card-header" id="targetHeader">
+                                                    <h6 class="mb-0 cursor">
+                                                        <a data-toggle="collapse" data-target="#targetCollapse" aria-expanded="true" aria-controls="targetCollapse">
+                                                            Target 1
+                                                        </a>
+                                                    </h6>
+                                                </div>
+
+                                                <div id="targetCollapse" class="collapse" aria-labelledby="targetHeader" data-parent="#targetAccordion">
+                                                    <div class="card-body bg-light">
+                                                        <p>Name : Property of Target 1</p>
+                                                        <p>Description : Property of Target 1</p>
+                                                        <p>URL : Property of Target 1</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script>
+        function toggleCheckboxes() {
+            var checkboxes = document.querySelectorAll('.select-all');
+            var selectAllCheckbox = document.getElementById('selectAll');
+
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            // DataTables
+            var table = $('#mappingTable').DataTable({
+                dom: 'rt<"d-flex" <"bottom col-md-7 mr-5"> <"bottom p-0 m-2"l><"bottom ml-5 p-0"i><"bottom ml-5 p-0"p>><"clear">',
+                paging: true,
+                responsive: true,
+                lengthMenu: [3, 5, 10, 25, 50],
+                pageLength: 3,
+                searching: true,
+                pagingType: "full",
+                language: {
+                    "paginate": {
+                        "first": '<i class="fas fa-angle-double-left"></i>',
+                        "previous": '<i class="fas fa-angle-left"></i>',
+                        "next": '<i class="fas fa-angle-right"></i>',
+                        "last": '<i class="fas fa-angle-double-right"></i>',
+                        "page": "_PAGE_"
+                    },
+                    "lengthMenu": "Items per page : _MENU_",
+                    "info": "_START_ - _END_ of _TOTAL_",
+                    "emptyTable": "No data available in the table",
+                    "infoEmpty": "0 - 0 of 0",
+                    "infoFiltered": ""
+                }
+            });
+
+            // Customised DataTables search
+            $("#customSearchButton").on("click", function () {
+                var searchText = $("#customSearchInput").val().toLowerCase();
+                table.search(searchText).draw();
+            });
+
+            // Update the search each time you enter data to trigger it in real time
+            $("#customSearchInput").on("input", function () {
+                var searchText = $(this).val().toLowerCase();
+                table.search(searchText).draw();
+            });
+
+            $('#columnFilter').change(function () {
+                var selectedColumn = $(this).val();
+                var searchText = $('#customSearchInput').val().toLowerCase();
+                var columnIndex = table.column(selectedColumn + ':name').index();
+                table.column(columnIndex).search(searchText).draw();
+            });
+
+            $('#customSearchInput').on('input', function () {
+                var selectedColumn = $('#columnFilter').val();
+                var searchText = $(this).val().toLowerCase();
+                var columnIndex = table.column(selectedColumn + ':name').index();
+                table.column(columnIndex).search(searchText).draw();
+            });
+        });
+    </script>
+}

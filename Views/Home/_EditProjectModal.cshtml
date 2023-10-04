@@ -1,1 +1,48 @@
-﻿
+﻿@model Project
+
+<div class="modal fade" id="@("editProjectModal-"+Model.Id)" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProjectModalLabel"><span>Edit Project</span></h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form id="editForm" asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <input type="hidden" id="Id" value="Id" />
+                    <div class="form-row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label asp-for="Name">Name:</label>
+                                <input asp-for="Name" type="text" class="form-control" placeholder="Name" autocomplete="on">
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Version">Version:</label>
+                                <input asp-for="Version" type="text" class="form-control" placeholder="Version">
+                                <span asp-validation-for="Version" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description">Description :</label>
+                        <input asp-for="Description" class="form-control" type="text" placeholder="Project Description">
+                    </div>
+
+                    <div class="modal-footer custom-modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary submit">Save</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

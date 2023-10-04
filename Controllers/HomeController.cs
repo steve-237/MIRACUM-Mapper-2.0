@@ -7,14 +7,8 @@ namespace MIRACUM_Mapper.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private List<Project> elements = new List<Project>
-        {
-             new Project { Id = 1, Name = "Internal LabCode to LOINC Mapping", Description ="description id1", Version = 1.0f, Sources = {}, Targets = {}, DisplayMappingEquivalence= true, DisplayStatus=false},
-             new Project { Id = 2, Name = "SNOMED to ICD Mapping", Description ="description id2",Version = 1.9f, Sources = {}, Targets = {}, DisplayMappingEquivalence= true, DisplayStatus=true},
-             new Project { Id = 3, Name = "ICD-10 to LOINC Mapping", Description ="description id3",Version = 0.8f, Sources = {}, Targets = {}, DisplayMappingEquivalence= false, DisplayStatus=false},
-             new Project { Id = 4, Name = "ICD-10 to SNOMED-CT Mapping",Description ="description id4", Version = 2.8f, Sources = {}, Targets = {}, DisplayMappingEquivalence= false, DisplayStatus=true}
-        };
 
+        List<Project> elements = db.db.elements.ToList();
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -30,52 +24,38 @@ namespace MIRACUM_Mapper.Controllers
             return elements;
         }
 
-        [HttpDelete]
-        public IActionResult Delete(int id)
+        [HttpPost]
+        public IActionResult Create(Project project)
         {
-            var elementToDelete = elements.FirstOrDefault(e => e.Id == id);
+            elements.Add(project);
+            var newElements = elements;
+            return View("Index", newElements);
+        }
 
-            if (elementToDelete != null)
+        [HttpPost]
+        public IActionResult Delete(Project project)
+        {
+            List<Project> updatedElements;
+
+            if (project != null)
             {
-                elements.Remove(elementToDelete);
-
-                var updatedElements = elements.Select(e => new { e.Id, e.Name, e.Version }).ToList();
-
-                return Json(new { success = true, message = "Element successfully deleted.", updatedElements });
+                var elementToDelete = elements.FirstOrDefault(e => e.Id == project.Id);
+                if (elementToDelete != null)
+                {
+                    if (elements.Remove(elementToDelete))
+                    {
+                        updatedElements = elements;
+                        return View("Index", updatedElements); //I have to redicted the view here to Index
+                    }
+                }
+                return PartialView("_ConfirmDelete", elements);
+                //return Json(new { success = true, message = "Element successfully deleted.", updatedElements });
             }
             else
             {
-                return Json(new { success = false, message = "Element not found." });
+                return PartialView("_ConfirmDelete", elements);
             }
         }
-
-        //[HttpPost]
-        //public IActionResult Edit([FromBody] Project editedProject)
-        //{
-        //    if (editedProject == null)
-        //    {
-        //        return Json(new { success = false, message = "Invalid data or data not provided." });
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-        //        return Json(new { success = false, errors = errors });
-        //    }
-
-        //    var existingProject = FindProjectById(editedProject.Id);
-        //    if (existingProject == null)
-        //    {
-        //        return Json(new { success = false, message = "Project not found.", editedProject });
-        //    }
-
-        //    existingProject.Name = editedProject.Name;
-        //    existingProject.Version = editedProject.Version;
-
-        //    var updatedProjects = GetAllProjects();
-
-        //    return Json(new { success = true, message = "Data updated successfully.", updatedProjects, editedProject });
-        //}
 
         [HttpGet]
         public IActionResult Edit(int Id)
@@ -88,49 +68,36 @@ namespace MIRACUM_Mapper.Controllers
 
             var updatedProjects = GetAllProjects();
 
-            return View("Edit", existingProject);
+            return PartialView("EditProjectModal", existingProject); //I have to redicted the view here to Index
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Project project)
+        public IActionResult Edit(Project project)
         {
-            if (id != project.Id)
-            {
-                return NotFound();
-            }
 
             Project projectToUpdate = elements.Find(p => p.Id == project.Id);
+            List<Project> updatedElements;
 
             if (ModelState.IsValid)
             {
                 if (projectToUpdate != null)
                 {
-                    projectToUpdate.Id = project.Id;
-                    projectToUpdate.Name = project.Name;
-                    projectToUpdate.Version = project.Version;
-                    projectToUpdate.Description = project.Description;
-                    projectToUpdate.Sources = project.Sources;
-                    projectToUpdate.Targets = project.Targets;
+                    project.Id = projectToUpdate.Id;
+                    elements.Remove(projectToUpdate);
+                    updatedElements = elements;
+                    updatedElements.Add(project);
+                    Console.WriteLine(updatedElements);
+                    return View("Index", updatedElements); //I have to redicted the view here to Index
                 }
-                return View("index", elements);
+                return PartialView("EditProjectModal", project);
             }
 
-            return Json(new { success = false, message = "Data updated failed.", elements, projectToUpdate });
-        }
-
-        public IActionResult EditModal(int projectId)
-        {
-            var project = FindProjectById(projectId);
-            return PartialView("_EditProjectModal", project);
+            return PartialView("EditProjectModal", project);
+            //return Json(new { success = false, message = "Data updated failed.", elements, projectToUpdate });
         }
 
         private Project FindProjectById(int id) => elements.FirstOrDefault(project => project.Id == id);
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

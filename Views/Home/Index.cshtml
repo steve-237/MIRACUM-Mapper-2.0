@@ -18,10 +18,10 @@
     </ul>
 }
 
-@await Html.PartialAsync("_CreateProjectModal")
+@await Html.PartialAsync("_CreateProjectModal", new Project())
 
 <div class="container-fluid h-100 d-flex flex-column justify-content-center align-items-center card mb-5">
-    <div class="container dashboard">
+    <div class="container-fluid dashboard">
         <div class="row justify-content-center align-items-center">
             <div class="col">
                 <div class="form-group d-flex m-3 justify-content-center">
@@ -50,12 +50,15 @@
                                             <p class="version">Version : <span class="version-field">@element.Version</span></p>
                                         </div>
                                         <div>
-                                            <a type="button" class="btn edit-button" asp-controller="Home" asp-action="Edit" asp-route-id="@element.Id">
+
+                                            <button class="btn edit-button" data-toggle="modal" data-target="@("#editProjectModal-" + element.Id)">
                                                 <i class="fa-solid fa-pen-to-square icon"></i>
-                                            </a>
-                                            <button class="btn delete-button" data-toggle="modal" data-target="#confirmDeleteModal" data-id="@element.Id">
+                                            </button>
+                                            @await Html.PartialAsync("_EditProjectModal", element)
+                                            <button class="btn delete-button" data-toggle="modal" data-target="@("#ConfirmDeleteModal-" + element.Id)">
                                                 <i class="fas fa-trash icon"></i>
                                             </button>
+                                            @await Html.PartialAsync("_ConfirmDelete", element)
                                         </div>
                                     </div>
                                 </td>
@@ -68,7 +71,7 @@
     </div>
 </div>
 
-@await Html.PartialAsync("_ConfirmDelete")
+
 
 @section scripts {
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
@@ -76,10 +79,10 @@
         $(document).ready(function () {
             // DataTables
             var table = $('#elementTable').DataTable({
-                dom: 'rt<"d-flex" <"bottom col-md-3"> <"bottom col-md-3 m-2"l><"bottom col-md-2"i><"bottom col-md-3"p>><"clear">',
+                dom: 'rt<"d-flex" <"bottom col-md-5 mr-5"> <"bottom p-0 m-2"l><"bottom ml-4 p-0"i><"bottom ml-4 p-0"p>><"clear">',
                 paging: true,
                 responsive: true,
-                lengthMenu: [3, 4, 10, 25, 50],
+                lengthMenu: [3, 5, 10, 25, 50],
                 pageLength: 3,
                 searching: true,
                 pagingType: "full",
@@ -109,92 +112,6 @@
             $("#customSearchInput").on("input", function () {
                 var searchText = $(this).val().toLowerCase();
                 table.search(searchText).draw();
-            });
-
-            var elementIdToDelete;
-            var rowToDelete; // Select the parent line of this button
-
-            $('#elementTable').on('click', '.delete-button', function () {
-                elementIdToDelete = $(this).data('id');
-                rowToDelete = $('#elementTable').DataTable().row($(this).closest('tr'));
-            });
-
-            $('#confirmDeleteButton').on('click', function () {
-
-                if (elementIdToDelete) {
-                    $.ajax({
-                        url: 'Home/Delete/' + elementIdToDelete, // API URL
-                        type: 'DELETE',
-                        success: function (data) {
-                            console.log(data);
-                            if (data.success) {
-                                // Delete the line in DataTables
-                                rowToDelete.remove().draw();
-                                console.log('Element successfully deleted.');
-                                // Close the modal
-                                $("[data-dismiss=modal]").trigger({ type: "click" });
-                            } else {
-                                console.error('Element not found or deletion failed.');
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error deleting element: ' + error);
-                        }
-                    });
-                }
-            });
-
-            var editedRow;
-
-            $('.edit-button').on('click', function () {
-
-                editedRow = $('#elementTable').DataTable().row($(this).closest('tr'));
-                var projectId = $(this).data('id');
-                var projectName = $(this).data('name');
-                var projectVersion = $(this).data('version');
-
-                $('#editId').val(projectId);
-                $('#editName').val(projectName);
-                $('#editVersion').val(projectVersion);
-
-            });
-
-            $('#saveButton').on('click', function () {
-                var projectId = $('#editId').val();
-                var editedName = $('#editName').val();
-                var editedVersion = $('#editVersion').val();
-
-                var updatedData = {
-                    id: projectId,
-                    name: $('#editName').val(),
-                    version: $('#editVersion').val()
-                };
-
-                console.log(updatedData);
-
-                $.ajax({
-                    url: '/Home/Edit/',
-                    type: 'POST',
-                    data: JSON.stringify(updatedData),
-                    contentType: 'application/json',
-                    success: function (data) {
-                        if(data.success) {
-                            var rowIndex = editedRow.index(); // Retrieve the index of the modified line
-
-                            table.cell(rowIndex, 0).node().querySelector('.name-field').innerText = data.editedProject.name; //Column 0: Name
-                            table.cell(rowIndex, 0).node().querySelector('.version-field').innerText = data.editedProject.version; // Column 0 : Version
-
-                            console.log('Data updated successfully.', data);
-                            // Close the modal
-                            $("[data-dismiss=modal]").trigger({ type: "click" });
-                        } else {
-                            console.error('Error updating data.', data);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error updating data: ' + error);
-                    }
-                });
             });
 
             var sourceFieldCount = 1;
@@ -274,48 +191,48 @@
                 }
             });
 
-            $("#saveProjectButton").click(function () {
+            // $("#saveProjectButton").click(function () {
 
-                var Sources = [];
-                var Targets = [];
+            //     var Sources = [];
+            //     var Targets = [];
 
-                var maxElements = 5;
+            //     var maxElements = 5;
 
-                for (var i = 0; i < maxElements; i++) {
+            //     for (var i = 0; i < maxElements; i++) {
 
-                    var selectSourceId = "projectSelectSource" + i;
-                    var selectTargetId = "projectSelectTarget" + i;
+            //         var selectSourceId = "projectSelectSource" + i;
+            //         var selectTargetId = "projectSelectTarget" + i;
 
-                    var selectSourceValue = $("select[name='" + selectSourceId + "']").val();
-                    var selectTargetValue = $("select[name='" + selectTargetId + "']").val();
+            //         var selectSourceValue = $("select[name='" + selectSourceId + "']").val();
+            //         var selectTargetValue = $("select[name='" + selectTargetId + "']").val();
 
-                    if (selectSourceValue !== undefined) {
-                        Sources.push(selectSourceValue);
-                    }
+            //         if (selectSourceValue !== undefined) {
+            //             Sources.push(selectSourceValue);
+            //         }
 
-                    if (selectTargetValue !== undefined) {
-                        Targets.push(selectTargetValue);
-                    }
-                }
+            //         if (selectTargetValue !== undefined) {
+            //             Targets.push(selectTargetValue);
+            //         }
+            //     }
 
-                var formData = {
-                    Name: $("#projectName").val(),
-                    Version: $("#projectVersion").val(),
-                    Description: $("#projectDescription").val(),
-                    Sources: Sources,
-                    Targets: Targets
-                };
+            //     var formData = {
+            //         Name: $("#projectName").val(),
+            //         Version: $("#projectVersion").val(),
+            //         Description: $("#projectDescription").val(),
+            //         Sources: Sources,
+            //         Targets: Targets
+            //     };
 
-                console.log(formData);
+            //     console.log(formData);
 
-                $.ajax({
-                    data: formData, 
-                    success: function (response) {
-                    },
-                    error: function (error) {
-                    }
-                });
-            });
+            //     $.ajax({
+            //         data: formData, 
+            //         success: function (response) {
+            //         },
+            //         error: function (error) {
+            //         }
+            //     });
+            // });
         });
     </script>
 }
