@@ -30,7 +30,7 @@
                                 <button class="btn btn-secondary" type="button" id="filterButton">Filter</button>
                             </div>
                             <select class="custom-select" id="columnFilter">
-                                <option value="">All Columns</option>
+                                <option value="all">All Columns</option>
                                 @if (Model.Mappings.First().Sources != null && Model.Mappings.First().Sources.Any())
                                 {
                                     @foreach (var source in Model.Mappings.First().Sources)
@@ -254,23 +254,6 @@
                 }
             });
 
-            // Customised DataTables search
-            $("#customSearchButton").on("click", function () {
-                var searchText = $("#customSearchInput").val().toLowerCase();
-                table.search(searchText).draw();
-            });
-
-            // Update the search each time you enter data to trigger it in real time
-            $("#customSearchInput").on("input", function () {
-                var searchText = $(this).val().toLowerCase();
-                table.search(searchText).draw();
-            });
-
-            $('#columnFilter').change(function () {
-                var selectedColumn = $(this).val();
-                var searchText = $('#customSearchInput').val().toLowerCase();
-            });
-
             $('#customSearchInput').on('input', function () {
                 var columnNames = table.columns().header().toArray();
                 var selectedColumn = $('#columnFilter').val();
@@ -285,15 +268,14 @@
                 }
 
                 if (columnIndex !== -1) {
-                    // columnIndex now holds the index of the selected column
-                    console.log("Selected Column Index: " + columnIndex);
+                    var searchText = $(this).val().toLowerCase();
+                    table.column(columnIndex).search(searchText).draw();
                 } else {
-                    console.log("Column not found.");
+                    $("#customSearchInput").on("input", function () {
+                        var searchText = $(this).val().toLowerCase();
+                        table.search(searchText).draw();
+                    });
                 }
-
-                
-                var searchText = $(this).val().toLowerCase();
-                table.column(columnIndex).search(searchText).draw();
             });
         });
     </script>
