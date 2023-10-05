@@ -35,27 +35,27 @@
                                 {
                                     @foreach (var source in Model.Mappings.First().Sources)
                                     {
-                                        <option value="@source.Name Code">@source.Name Code</option>
-                                        <option value="@source.Name Meaning">@source.Name Meaning</option>
+                                        <option value="@source.Name Code (Source)">@source.Name Code (Source)</option>
+                                        <option value="@source.Name Meaning (Source)">@source.Name Meaning (Source)</option>
                                     }
                                 }
                                 @if (Model.Mappings.First().Targets != null && Model.Mappings.First().Targets.Any())
                                 {
                                     @foreach (var target in Model.Mappings.First().Targets)
                                     {
-                                        <option value="@target.Name Code">@target.Name Code</option>
-                                        <option value="">@target.Name Meaning</option>
+                                        <option value="@target.Name Code (Target)">@target.Name Code (Target)</option>
+                                        <option value="@target.Name Meaning (Target)">@target.Name Meaning (Target)</option>
                                     }
                                 }
                                 @if (Model.DisplayStatus)
                                 {
-                                    <option value="status">Status</option>
+                                    <option value="Status">Status</option>
                                 }
                                 @if (Model.DisplayMappingEquivalence)
                                 {
-                                    <option value="equivalence">Equivalence</option>
+                                    <option value="Equivalence">Equivalence</option>
                                 }
-                                <option value="comment">Comment</option>
+                                <option value="Comment">Comment</option>
                             </select>
                         </div>
                     </div>
@@ -269,14 +269,30 @@
             $('#columnFilter').change(function () {
                 var selectedColumn = $(this).val();
                 var searchText = $('#customSearchInput').val().toLowerCase();
-                var columnIndex = table.column(selectedColumn + ':name').index();
-                table.column(columnIndex).search(searchText).draw();
             });
 
             $('#customSearchInput').on('input', function () {
+                var columnNames = table.columns().header().toArray();
                 var selectedColumn = $('#columnFilter').val();
+                var columnIndex = -1;
+
+                for (var i = 0; i < columnNames.length; i++) {
+                    console.log(columnNames[i].innerText);
+                    if (columnNames[i].innerText === selectedColumn) {
+                        columnIndex = i;
+                        break;
+                    }
+                }
+
+                if (columnIndex !== -1) {
+                    // columnIndex now holds the index of the selected column
+                    console.log("Selected Column Index: " + columnIndex);
+                } else {
+                    console.log("Column not found.");
+                }
+
+                
                 var searchText = $(this).val().toLowerCase();
-                var columnIndex = table.column(selectedColumn + ':name').index();
                 table.column(columnIndex).search(searchText).draw();
             });
         });
