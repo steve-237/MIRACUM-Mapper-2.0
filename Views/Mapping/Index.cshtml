@@ -96,7 +96,7 @@
                         <tbody>
                             @foreach (var mapping in Model.Mappings)
                             {
-                                <tr>
+                                <tr data-mapping-id="@mapping.Id">
                                     <td><input type="checkbox" name="selection" class="select-all" /></td>
                                     <td>@mapping.Sources.First().Concept.Code</td>
                                     <td>@mapping.Sources.First().Concept.Meaning</td>
@@ -197,9 +197,8 @@
 
                                                 <div id="sourceCollapse" class="collapse" aria-labelledby="sourceHeader" data-parent="#sourceAccordion">
                                                     <div class="card-body bg-light">
-                                                        <p>Name : Property of Source 1</p>
-                                                        <p>Description : Property of Source 1</p>
-                                                        <p>URL : Property of Source 1</p>
+                                                        <p id="sourceName"></p>
+                                                        <p id="sourceDescription"></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -233,9 +232,8 @@
 
                                                 <div id="targetCollapse" class="collapse" aria-labelledby="targetHeader" data-parent="#targetAccordion">
                                                     <div class="card-body bg-light">
-                                                        <p>Name : Property of Target 1</p>
-                                                        <p>Description : Property of Target 1</p>
-                                                        <p>URL : Property of Target 1</p>
+                                                        <p id="targetName"></p>
+                                                        <p id="targetDescription"></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -246,7 +244,15 @@
                         </div>
                         <div class="mt-3">
                             <h5>Other Information</h5>
-                        </div>
+                            @if (Model.DisplayMappingEquivalence)
+                            {
+                                <p id="equivalence"></p>
+                            }
+                            @if (Model.DisplayStatus)
+                            {
+                                <p id="status"></p>
+                            }
+                            <p id="comment"></p>
                     </div>
                 </div>
             </div>
@@ -265,6 +271,40 @@
                 checkbox.checked = selectAllCheckbox.checked;
             });
         }
+
+        $('#mappingTable tbody').on('click', 'tr', function () {
+            var rowData = $('#mappingTable').DataTable().row(this).data();
+            var selectedLineProperties = $('#selected-line-properties');
+
+            if (rowData) {
+
+                var sourceName = $('#sourceName');
+                var sourceDescription = $('#sourceDescription');
+
+                var targetName = $('#targetName');
+                var targetDescription = $('#targetDescription');
+
+                var equivalence = $('#equivalence');
+
+                var status = $('#status');
+
+                var comment = $('#comment');
+
+                sourceName.text('Name : ' + rowData[1]);
+                sourceDescription.text('Description : ' + rowData[2]);
+
+                targetName.text('Name : ' + rowData[3]);
+                targetDescription.text('Description : ' + rowData[4]);
+
+                equivalence.text('Equivalence : ' + rowData[5]);
+                status.text('Status : ' + rowData[6]);
+
+                comment.text('Comment : ' + rowData[7]);
+            } else {
+                selectedLineProperties.html('<p>No mapping selected.</p>');
+            }
+        });
+
     </script>
     <script>
         $(document).ready(function () {

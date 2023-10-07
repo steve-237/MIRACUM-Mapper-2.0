@@ -18,6 +18,7 @@ namespace MIRACUM_Mapper.db
                 {
                     new Mapping
                     {
+                        Id = 1,
                         Sources = new List<Source>
                         {
                             new Source
@@ -48,6 +49,7 @@ namespace MIRACUM_Mapper.db
                     },
                     new Mapping
                     {
+                        Id = 2,
                         Sources = new List<Source>
                         {
                             new Source
@@ -78,6 +80,7 @@ namespace MIRACUM_Mapper.db
                     },
                     new Mapping
                     {
+                        Id = 3,
                         Sources = new List<Source>
                         {
                             new Source
@@ -120,6 +123,7 @@ namespace MIRACUM_Mapper.db
                 {
                     new Mapping
                     {
+                        Id = 1,
                         Sources = new List<Source>
                         {
                             new Source
@@ -150,6 +154,7 @@ namespace MIRACUM_Mapper.db
                     },
                     new Mapping
                     {
+                        Id = 2,
                         Sources = new List<Source>
                         {
                             new Source
@@ -180,6 +185,7 @@ namespace MIRACUM_Mapper.db
                     },
                     new Mapping
                     {
+                        Id = 3,
                         Sources = new List<Source>
                         {
                             new Source
@@ -210,6 +216,7 @@ namespace MIRACUM_Mapper.db
                     },
                     new Mapping
                     {
+                        Id = 4,
                         Sources = new List<Source>
                         {
                             new Source
@@ -240,6 +247,7 @@ namespace MIRACUM_Mapper.db
                     },
                     new Mapping
                     {
+                        Id = 5,
                         Sources = new List<Source>
                         {
                             new Source
@@ -282,6 +290,7 @@ namespace MIRACUM_Mapper.db
                 {
                     new Mapping
                     {
+                        Id = 1,
                         Sources = new List<Source>
                         {
                             new Source
@@ -324,6 +333,7 @@ namespace MIRACUM_Mapper.db
                 {
                     new Mapping
                     {
+                        Id = 1,
                         Sources = new List<Source>
                         {
                             new Source
@@ -366,6 +376,7 @@ namespace MIRACUM_Mapper.db
                 {
                     new Mapping
                     {
+                        Id = 1,
                         Sources = new List<Source>
                         {
                             new Source
