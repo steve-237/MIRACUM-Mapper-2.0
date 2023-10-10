@@ -98,10 +98,16 @@
                             {
                                 <tr data-mapping-id="@mapping.Id">
                                     <td><input type="checkbox" name="selection" class="select-all" /></td>
-                                    <td>@mapping.Sources.First().Concept.Code</td>
-                                    <td>@mapping.Sources.First().Concept.Meaning</td>
-                                    <td>@mapping.Targets.First().Concept.Code</td>
-                                    <td>@mapping.Targets.First().Concept.Meaning</td>
+                                    @foreach(var source in mapping.Sources)
+                                    {
+                                        <td>@source.Concept.Code</td>
+                                        <td>@source.Concept.Meaning</td>
+                                    }
+                                    @foreach (var target in mapping.Targets)
+                                    {
+                                        <td>@target.Concept.Code</td>
+                                        <td>@target.Concept.Meaning</td>
+                                    }
                                     @if (Model.DisplayMappingEquivalence)
                                     {
                                         <td>@mapping.Equivalence</td>
@@ -253,6 +259,7 @@
                                 <p id="status"></p>
                             }
                             <p id="comment"></p>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -9,6 +9,76 @@ namespace MIRACUM_Mapper.db
             new Project
             {
                 Id = 1,
+                Name = "Creative Mapping Endeavor",
+                Version = 1.01f,
+                Description = "Exploration of Complex Mapping between LOINC, SNOMED-CT, and UMLS to Other Terminologies",
+                DisplayMappingEquivalence = true,
+                DisplayStatus = true,
+                Mappings = new List<Mapping>
+                {
+                    new Mapping
+                    {
+                        Id = 0,
+                        Sources = new List<Source>
+                        {
+                            new Source
+                            {
+                                Name = "LOINC",
+                                Concept = new Concept
+                                {
+                                    Code = "12345-6",
+                                    Meaning = "Serum creatinine"
+                                }
+                            },
+                            new Source
+                            {
+                                Name = "SNOMED-CT",
+                                Concept = new Concept
+                                {
+                                    Code = "7890123",
+                                    Meaning = "Hypertension"
+                                }
+                            },
+                            new Source
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0012345",
+                                    Meaning = "Renal dysfunction"
+                                }
+                            }
+                        },
+                        Targets = new List<Target>
+                        {
+                            new Target
+                            {
+                                Name = "Other Terminologies",
+                                Concept = new Concept
+                                {
+                                    Code = "T987654",
+                                    Meaning = "Kidney function abnormalities"
+                                }
+                            },
+                            new Target
+                            {
+                                Name = "Other Terminologies",
+                                Concept = new Concept
+                                {
+                                    Code = "T567890",
+                                    Meaning = "High blood pressure"
+                                }
+                            }
+                        },
+                        Equivalence = "Equivalent",
+                        Status = "Active",
+                        Comment = "Mapping verified"
+                    },
+                }
+            },
+            new Project
+            {
+                Id = 1,
                 Name = "Project 1",
                 Version = 1.01f,
                 Description = "Mapping from ICD-10 to UMLS",
@@ -26,8 +96,26 @@ namespace MIRACUM_Mapper.db
                                 Name = "ICD-10",
                                 Concept = new Concept
                                 {
-                                    Code = "A00.1",
-                                    Meaning = "Cholera due to Vibrio cholerae 01, biovar eltor"
+                                    Code = "A01.1",
+                                    Meaning = "Intestinal infection by E. coli"
+                                }
+                            },
+                            new Source
+                            {
+                                Name = "ICD-10",
+                                Concept = new Concept
+                                {
+                                    Code = "B02.2",
+                                    Meaning = "Influenza due to A(H1N1) virus"
+                                }
+                            },
+                            new Source
+                            {
+                                Name = "ICD-10",
+                                Concept = new Concept
+                                {
+                                    Code = "C03.3",
+                                    Meaning = "Malignant neoplasm of colon"
                                 }
                             }
                         },
@@ -38,10 +126,28 @@ namespace MIRACUM_Mapper.db
                                 Name = "UMLS",
                                 Concept = new Concept
                                 {
-                                    Code = "C0008031",
-                                    Meaning = "Cholera"
+                                    Code = "C0001234",
+                                    Meaning = "Bacterial infection of intestine"
                                 }
                             },
+                            new Target
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0005678",
+                                    Meaning = "Influenza A(H1N1)"
+                                }
+                            },
+                            new Target
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0009876",
+                                    Meaning = "Colon carcinoma"
+                                }
+                            }
                         },
                         Equivalence = "Equivalent",
                         Status = "Active",
@@ -57,8 +163,26 @@ namespace MIRACUM_Mapper.db
                                 Name = "ICD-10",
                                 Concept = new Concept
                                 {
-                                    Code = "A00.2",
-                                    Meaning = "Cholera due to Vibrio cholerae 01, biovar classic"
+                                    Code = "D04.4",
+                                    Meaning = "Nosebleed"
+                                }
+                            },
+                            new Source
+                            {
+                                Name = "ICD-10",
+                                Concept = new Concept
+                                {
+                                    Code = "E05.5",
+                                    Meaning = "Hypothyroidism"
+                                }
+                            },
+                            new Source
+                            {
+                                Name = "ICD-10",
+                                Concept = new Concept
+                                {
+                                    Code = "F06.6",
+                                    Meaning = "Mental disorder due to brain injury"
                                 }
                             }
                         },
@@ -69,12 +193,30 @@ namespace MIRACUM_Mapper.db
                                 Name = "UMLS",
                                 Concept = new Concept
                                 {
-                                    Code = "C0008032",
-                                    Meaning = "Cholera classic"
+                                    Code = "C0012345",
+                                    Meaning = "Nosebleed"
                                 }
                             },
+                            new Target
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0056789",
+                                    Meaning = "Hypothyroidism"
+                                }
+                            },
+                            new Target
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0098765",
+                                    Meaning = "Mental disorder due to brain injury"
+                                }
+                            }
                         },
-                        Equivalence = "Equivalent",
+                        Equivalence = "Not Equivalent",
                         Status = "Inactive",
                         Comment = "Mapping not checked"
                     },
@@ -88,8 +230,26 @@ namespace MIRACUM_Mapper.db
                                 Name = "ICD-10",
                                 Concept = new Concept
                                 {
-                                    Code = "A00.3",
-                                    Meaning = "Cholera due to Vibrio cholerae 01, biovar test"
+                                    Code = "G07.7",
+                                    Meaning = "Intracranial abscess and granuloma"
+                                }
+                            },
+                            new Source
+                            {
+                                Name = "ICD-10",
+                                Concept = new Concept
+                                {
+                                    Code = "H08.8",
+                                    Meaning = "Disorders of eyelid, lacrimal system, and orbit in diseases classified elsewhere"
+                                }
+                            },
+                            new Source
+                            {
+                                Name = "ICD-10",
+                                Concept = new Concept
+                                {
+                                    Code = "I09.9",
+                                    Meaning = "Rheumatic heart disease, unspecified"
                                 }
                             }
                         },
@@ -100,12 +260,164 @@ namespace MIRACUM_Mapper.db
                                 Name = "UMLS",
                                 Concept = new Concept
                                 {
-                                    Code = "C0008033",
-                                    Meaning = "Cholera test"
+                                    Code = "C0123456",
+                                    Meaning = "Intracranial abscess"
+                                }
+                            },
+                            new Target
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0456789",
+                                    Meaning = "Eyelid disorders"
+                                }
+                            },
+                            new Target
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0987654",
+                                    Meaning = "Unspecified rheumatic heart disease"
                                 }
                             },
                         },
                         Equivalence = "Not Equivalent",
+                        Status = "Inactive",
+                        Comment = "Mapping not checked"
+                    },
+                    new Mapping
+                    {
+                        Id = 4,
+                        Sources = new List<Source>
+                        {
+                            new Source
+                            {
+                                Name = "ICD-10",
+                                Concept = new Concept
+                                {
+                                    Code = "J10.0",
+                                    Meaning = "Influenza due to other identified influenza virus"
+                                }
+                            },
+                            new Source
+                            {
+                                Name = "ICD-10",
+                                Concept = new Concept
+                                {
+                                    Code = "K20.9",
+                                    Meaning = "Gastro-esophageal reflux disease without esophagitis"
+                                }
+                            },
+                            new Source
+                            {
+                                Name = "ICD-10",
+                                Concept = new Concept
+                                {
+                                    Code = "L30.9",
+                                    Meaning = "Dermatitis, unspecified"
+                                }
+                            }
+                        },
+                        Targets = new List<Target>
+                        {
+                            new Target
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0222222",
+                                    Meaning = "Influenza due to influenza A virus"
+                                }
+                            },
+                            new Target
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0333333",
+                                    Meaning = "Gastroesophageal reflux disease"
+                                }
+                            },
+                            new Target
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0444444",
+                                    Meaning = "Unspecified dermatitis"
+                                }
+                            },
+                        },
+                        Equivalence = "Equivalent",
+                        Status = "Active",
+                        Comment = "Mapping checked"
+                    },
+                    new Mapping
+                    {
+                        Id = 5,
+                        Sources = new List<Source>
+                        {
+                            new Source
+                            {
+                                Name = "ICD-10",
+                                Concept = new Concept
+                                {
+                                    Code = "M12.3",
+                                    Meaning = "Traumatic arthropathy of the elbow"
+                                }
+                            },
+                            new Source
+                            {
+                                Name = "ICD-10",
+                                Concept = new Concept
+                                {
+                                    Code = "N12.0",
+                                    Meaning = "Tubulo-interstitial nephritis"
+                                }
+                            },
+                            new Source
+                            {
+                                Name = "ICD-10",
+                                Concept = new Concept
+                                {
+                                    Code = "O12.4",
+                                    Meaning = "Gestational edema"
+                                }
+                            }
+                        },
+                        Targets = new List<Target>
+                        {
+                            new Target
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0555555",
+                                    Meaning = "Elbow arthropathy due to trauma"
+                                }
+                            },
+                            new Target
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0666666",
+                                    Meaning = "Tubulointerstitial nephritis"
+                                }
+                            },
+                            new Target
+                            {
+                                Name = "UMLS",
+                                Concept = new Concept
+                                {
+                                    Code = "C0777777",
+                                    Meaning = "Edema of pregnancy"
+                                }
+                            },
+                        },
+                        Equivalence = "Equivalent",
                         Status = "Active",
                         Comment = "Mapping verified"
                     }
