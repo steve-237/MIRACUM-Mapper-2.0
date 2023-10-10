@@ -225,3 +225,8 @@ label {
         transform: rotate(360deg);
     }
 }
+
+.description {
+    color: #b7b3b3;
+    font-size: small;
+}
