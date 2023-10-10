@@ -8,9 +8,9 @@ namespace MIRACUM_Mapper.db
         {
             new Project
             {
-                Id = 1,
+                Id = 0,
                 Name = "Creative Mapping Endeavor",
-                Version = 1.01f,
+                Version = 1.09f,
                 Description = "Exploration of Complex Mapping between LOINC, SNOMED-CT, and UMLS to Other Terminologies",
                 DisplayMappingEquivalence = true,
                 DisplayStatus = true,
@@ -18,7 +18,7 @@ namespace MIRACUM_Mapper.db
                 {
                     new Mapping
                     {
-                        Id = 0,
+                        Id = 1,
                         Sources = new List<Source>
                         {
                             new Source
