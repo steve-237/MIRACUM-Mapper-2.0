@@ -24,14 +24,14 @@ namespace MIRACUM_Mapper.Controllers
         [HttpPost]
         public IActionResult FetchInfo(int projectId, List<int> selectedMappings)
         {
-            var projet = elements.FirstOrDefault(p => p.Id == projectId);
+            var project = elements.FirstOrDefault(p => p.Id == projectId);
 
-            if (projet == null)
+            if (project == null)
             {
                 return NotFound();
             }
 
-            var mappings = projet.Mappings.Where(m => selectedMappings.Contains(m.Id)).ToList();
+            var mappings = project.Mappings.Where(m => selectedMappings.Contains(m.Id)).ToList();
 
             if (mappings == null)
             {
