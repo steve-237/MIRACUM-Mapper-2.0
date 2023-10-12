@@ -180,7 +180,8 @@
                     <div class="panel-body p-3" style="background-color: #D9D9D9;">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5>Selected Line Properties</h5>
-                            <button type="button" class="btn btn-danger mb-3">Delete Line</button>
+                            <button type="button" class="btn btn-danger mb-3" id="deleteSelectedLinesButton">Delete Lines</button>
+                            @await Html.PartialAsync("_ConfirmDeleteLines")
                         </div>
                         <div class="accordion" id="sourcesAccordion">
                             <div class="card">
@@ -298,10 +299,12 @@
                 $("input.selected-mapping").prop('checked', this.checked);
             });
 
+            var projectId;
+
             $("table#mappingTable tbody tr").on("click", function () {
                 $("#selectAll").prop("checked", false);
 
-                var projectId = $(this).data("project-id");
+                projectId = $(this).data("project-id");
                 var mappingId = $(this).data("mapping-id");
 
                 var selectedMappings = [];
@@ -394,7 +397,53 @@
                         $('#otherInfo').html(infoAccordionContent);
                     }
                 });
+
             });
+
+            $('#deleteSelectedLinesButton').on('click', function () {
+                $('#confirmDeleteLinesModal').modal('show');
+            });
+
+            $('#closeConfirmDeleteLinesModal').on('click', function () {
+                $('#confirmDeleteLinesModal').modal('hide');
+            });
+
+            $('#confirmDeleteLinesModal button.btn-secondary').on('click', function () {
+                $('#confirmDeleteLinesModal').modal('hide');
+            });
+
+            $('#confirmDeleteLinesButton').on('click', function () {
+                var selectedMappings = [];
+
+                $("input.selected-mapping:checked").each(function () {
+                    var selectedMappingId = $(this).data("mapping-id");
+                    selectedMappings.push(selectedMappingId);
+                });
+
+                if (selectedMappings.length === 0) {
+                    return;
+                }
+
+                selectedMappings.forEach(function (mappingId) {
+                    $('tr[data-mapping-id="' + mappingId + '"]').remove();
+                });
+
+                console.log(selectedMappings);
+
+                $.ajax({
+                    url: "/Mapping/DeleteSelectedMappings",
+                    method: "POST",
+                    data: { projectId: projectId, selectedMappings: selectedMappings },
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function () {
+
+                    }
+                });
+                $('#confirmDeleteLinesModal').modal('hide');
+            });
+ 
         });
     </script>
 }

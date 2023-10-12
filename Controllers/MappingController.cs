@@ -65,5 +65,31 @@ namespace MIRACUM_Mapper.Controllers
                 return PartialView("_ConfirmDelete", elements);
             }
         }
+
+        [HttpPost]
+        public IActionResult DeleteSelectedMappings(int projectId, List<int> selectedMappings)
+        {
+
+            var project = elements.FirstOrDefault(p => p.Id == projectId);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+
+            foreach (var mappingId in selectedMappings)
+            {
+                var mappingToRemove = project.Mappings.FirstOrDefault(m => m.Id == mappingId);
+                if (mappingToRemove != null)
+                {
+                    project.Mappings.Remove(mappingToRemove);
+                }
+            }
+
+
+            return Json(new { success = true, project });
+        }
+
     }
 }
