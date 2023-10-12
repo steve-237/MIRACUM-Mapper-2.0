@@ -40,5 +40,30 @@ namespace MIRACUM_Mapper.Controllers
 
             return Json(mappings);
         }
+
+        [HttpPost]
+        public IActionResult Delete(Project project)
+        {
+            List<Project> updatedElements;
+
+            if (project != null)
+            {
+                var elementToDelete = elements.FirstOrDefault(e => e.Id == project.Id);
+                if (elementToDelete != null)
+                {
+                    if (elements.Remove(elementToDelete))
+                    {
+                        updatedElements = elements;
+                        return View("~/Views/Home/Index.cshtml", updatedElements); //I have to redicted the view here to Index
+                    }
+                }
+                return PartialView("_ConfirmDelete", elements);
+                //return Json(new { success = true, message = "Element successfully deleted.", updatedElements });
+            }
+            else
+            {
+                return PartialView("_ConfirmDelete", elements);
+            }
+        }
     }
 }

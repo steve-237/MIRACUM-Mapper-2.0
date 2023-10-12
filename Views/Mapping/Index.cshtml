@@ -139,7 +139,10 @@
                                 <p>Description : @Model.Description</p>
                                 <p>Number of Sources : @Model.Mappings.First().Sources.Count</p>
                                 <p>Number of Targets : @Model.Mappings.First().Targets.Count</p>
-                                <button type="button" class="btn btn-danger">Delete Project</button>
+                                <button class="btn btn-danger" data-toggle="modal" data-target="@("#ConfirmDeleteModal-" + Model.Id)">
+                                    Delete Project
+                                </button>
+                                @await Html.PartialAsync("_ConfirmDelete", Model)
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3 text-right">
