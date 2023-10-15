@@ -88,7 +88,7 @@ namespace MIRACUM_Mapper.Controllers
             }
 
 
-            return Json(new { success = true, project });
+            return View("Index", project);
         }
 
     }

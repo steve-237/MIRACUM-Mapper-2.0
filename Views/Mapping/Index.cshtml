@@ -424,10 +424,6 @@
                     return;
                 }
 
-                selectedMappings.forEach(function (mappingId) {
-                    $('tr[data-mapping-id="' + mappingId + '"]').remove();
-                });
-
                 console.log(selectedMappings);
 
                 $.ajax({
@@ -435,7 +431,7 @@
                     method: "POST",
                     data: { projectId: projectId, selectedMappings: selectedMappings },
                     success: function (data) {
-                        console.log(data);
+                        window.location.reload();
                     },
                     error: function () {
 
