@@ -91,5 +91,15 @@ namespace MIRACUM_Mapper.Controllers
             return View("Index", project);
         }
 
+        public IActionResult Edit(int id)
+        {
+            var project = elements.FirstOrDefault(e => e.Id == id);
+            if (project == null)
+            {
+                return View("Error");
+            }
+            return View(project);
+        }
+
     }
 }
