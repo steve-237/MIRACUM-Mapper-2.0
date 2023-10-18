@@ -1,5 +1,367 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Project
+
 @{
+    ViewData["Title"] = "Edit";
+}
+@section NavBarItems {
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a asp-controller="Home" asp-action="Index" class="nav-link">Projects List</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Edit This Project</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Create New Project From This</a>
+        </li>
+    </ul>
+}
+
+<div class="container-fluid h-100 d-flex flex-column justify-content-center align-items-center card mb-5">
+    <div id="loadingOverlay" class="loading-overlay">
+        <div>
+            <p>Data is being loaded...</p>
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="mt-3 mb-3"><h4>Mapping Table : @Model.Name</h4></div>
+        <div class="justify-content-center align-items-center table-panel pt-2">
+            <div class="col">
+                <div class="form-group d-flex m-3 justify-content-center">
+                    <div class="col-6 pr-1 position-relative">
+                        <div class="d-flex">
+                            <input type="text" id="customSearchInput" class="form-control" placeholder="Filter the Mapping Table...">
+                            <select class="custom-select" id="columnFilter">
+                                <option value="all">Filter By All Columns</option>
+                                @if (Model.Mappings.First().Sources != null && Model.Mappings.First().Sources.Any())
+                                {
+                                    @foreach (var source in Model.Mappings.First().Sources)
+                                    {
+                                        <option value="@source.Name Code (Source)">@source.Name Code (Source)</option>
+                                        <option value="@source.Name Meaning (Source)">@source.Name Meaning (Source)</option>
+                                    }
+                                }
+                                @if (Model.Mappings.First().Targets != null && Model.Mappings.First().Targets.Any())
+                                {
+                                    @foreach (var target in Model.Mappings.First().Targets)
+                                    {
+                                        <option value="@target.Name Code (Target)">@target.Name Code (Target)</option>
+                                        <option value="@target.Name Meaning (Target)">@target.Name Meaning (Target)</option>
+                                    }
+                                }
+                                @if (Model.DisplayStatus)
+                                {
+                                    <option value="Status">Status</option>
+                                }
+                                @if (Model.DisplayMappingEquivalence)
+                                {
+                                    <option value="Equivalence">Equivalence</option>
+                                }
+                                <option value="Comment">Comment</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="table-responsive">
+                    <form method="post">
+                        <table id="mappingTable" class="table">
+                            <thead class="custom-thead-dark">
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll"></th>
+                                    @foreach (var source in Model.Mappings.First().Sources)
+                                    {
+                                        <td>@source.Name Code (Source)</td>
+                                        <td>@source.Name Meaning (Source)</td>
+                                    }
+
+                                    @foreach (var target in Model.Mappings.First().Targets)
+                                    {
+                                        <td>@target.Name Code (Target)</td>
+                                        <td>@target.Name Meaning (Target)</td>
+                                    }
+                                    @if (Model.DisplayStatus)
+                                    {
+                                        <th>Status</th>
+                                    }
+                                    @if (Model.DisplayMappingEquivalence)
+                                    {
+                                        <th>Equivalence</th>
+                                    }
+                                    <th>Comment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var mapping in Model.Mappings)
+                                {
+                                    <tr data-project-id="@Model.Id" data-mapping-id="@mapping.Id">
+                                        <td><input type="checkbox" class="selected-mapping select-all" name="selectedMappings" data-project-id="@Model.Id" data-mapping-id="@mapping.Id" /></td>
+                                        @foreach (var source in mapping.Sources)
+                                        {
+                                            <td><input asp-for="@source.Concept.Code"></td>
+                                            <td><input asp-for="@source.Concept.Meaning"></td>
+                                        }
+                                        @foreach (var target in mapping.Targets)
+                                        {
+                                            <td><input asp-for="@target.Concept.Code"></td>
+                                            <td><input asp-for="@target.Concept.Meaning"></td>
+                                        }
+                                        @if (Model.DisplayMappingEquivalence)
+                                        {
+                                            <td><input asp-for="@mapping.Equivalence"></td>
+                                        }
+                                        @if (Model.DisplayStatus)
+                                        {
+                                            <td><input asp-for="@mapping.Status"></td>
+                                        }
+                                        <td><input asp-for="@mapping.Comment"></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body p-3" style="background-color: #D9D9D9;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                
+                            </div>
+                            <div class="col-md-6">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body p-3" style="background-color: #D9D9D9;">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // DataTables
+            var table = $('#mappingTable').DataTable({
+                dom: 'rt<"d-flex" <"bottom col-md-7 mr-4"> <"bottom p-0 m-2"l><"bottom ml-5 p-0"i><"bottom ml-5 p-0"p>><"clear">',
+                paging: true,
+                responsive: true,
+                lengthMenu: [3, 5, 10, 25, 50],
+                pageLength: 3,
+                searching: true,
+                pagingType: "full",
+                language: {
+                    "paginate": {
+                        "first": '<i class="fas fa-angle-double-left"></i>',
+                        "previous": '<i class="fas fa-angle-left"></i>',
+                        "next": '<i class="fas fa-angle-right"></i>',
+                        "last": '<i class="fas fa-angle-double-right"></i>',
+                        "page": "_PAGE_"
+                    },
+                    "lengthMenu": "Items per page : _MENU_",
+                    "info": "_START_ - _END_ of _TOTAL_",
+                    "emptyTable": "No data available in the table",
+                    "infoEmpty": "0 - 0 of 0",
+                    "infoFiltered": ""
+                }
+            });
+
+            //for the spinner
+            $("#loadingOverlay").show();
+
+            setTimeout(function () {
+                $("#loadingOverlay").hide();
+            }, 50);
+
+            $('#customSearchInput').on('input', function () {
+                var columnNames = table.columns().header().toArray();
+                var selectedColumn = $('#columnFilter').val();
+                var columnIndex = -1;
+
+                for (var i = 0; i < columnNames.length; i++) {
+                    console.log(columnNames[i].innerText);
+                    if (columnNames[i].innerText === selectedColumn) {
+                        columnIndex = i;
+                        break;
+                    }
+                }
+
+                if (columnIndex !== -1) {
+                    var searchText = $(this).val().toLowerCase();
+                    table.column(columnIndex).search(searchText).draw();
+                } else {
+                    $("#customSearchInput").on("input", function () {
+                        var searchText = $(this).val().toLowerCase();
+                        table.search(searchText).draw();
+                    });
+                }
+            });
+
+            //to show the details of mapping table line
+            $("#selectAll").click(function () {
+                $("input.selected-mapping").prop('checked', this.checked);
+            });
+
+            var projectId;
+
+            $("table#mappingTable tbody tr").on("click", function () {
+                $("#selectAll").prop("checked", false);
+
+                projectId = $(this).data("project-id");
+                var mappingId = $(this).data("mapping-id");
+
+                var selectedMappings = [];
+
+                $("input.selected-mapping:checked").each(function () {
+                    var selectedMappingId = $(this).data("mapping-id");
+                    selectedMappings.push(selectedMappingId);
+                });
+
+                $.ajax({
+                    url: "/Mapping/FetchInfo",
+                    type: "POST",
+                    data: { projectId: projectId, selectedMappings: selectedMappings },
+                    success: function (data) {
+
+                        var infoAccordionContent = '';
+                        var sourceAccordionContent = '';
+                        var targetAccordionContent = '';
+
+                        data.forEach(function (mapping, index) {
+                            var mappingId = mapping.Id;
+
+                            mapping.sources.forEach(function (source, index) {
+                                var sourceAccordion = `
+                                                    <div class="card">
+                                                        <div class="card-header" id="source${index}">
+                                                            <h5 class="mb-0">
+                                                                <button class="btn btn-link" data-toggle="collapse" data-target="#sourceContent${index}">
+                                                                     Source ${index + 1} : ${source.name}
+                                                                </button>
+                                                            </h5>
+                                                        </div>
+                                                                        <div id="sourceContent${index}" class="collapse" aria-labelledby="source${index}" data-parent="#accordion">
+                                                            <div class="card-body">
+                                                                <p>Code: ${source.concept.code}</p>
+                                                                <p>Meaning: ${source.concept.meaning}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>`;
+
+                                sourceAccordionContent += sourceAccordion;
+                            });
+
+                            mapping.targets.forEach(function (target, index) {
+                                var targetAccordion = `
+                                                            <div class="card">
+                                                                <div class="card-header" id="target${index}">
+                                                                    <h5 class="mb-0">
+                                                                        <button class="btn btn-link" data-toggle="collapse" data-target="#targetContent${index}">
+                                                                            Target ${index + 1} : ${target.name}
+                                                                        </button>
+                                                                    </h5>
+                                                                </div>
+                                                                                <div id="targetContent${index}" class="collapse" aria-labelledby="target${index}" data-parent="#accordion">
+                                                                    <div class="card-body">
+                                                                        <p>Code: ${target.concept.code}</p>
+                                                                        <p>Meaning: ${target.concept.meaning}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            `;
+
+                                targetAccordionContent += targetAccordion;
+                            });
+
+                            var mappingAccordion = `
+                                            <div class="card">
+                                                <div class="card-header" id="mappingHeader${index}">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link" data-toggle="collapse" data-target="#mappingContent${index}">
+                                                           Remaining Information ${index + 1}
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="mappingContent${index}" class="collapse" aria-labelledby="mappingHeader${index}" data-parent="#accordion">
+                                                    <div class="card-body">
+                                                        <p>ID: ${mapping.id}</p>
+                                                        <p>Equivalence: ${mapping.equivalence}</p>
+                                                        <p>Status: ${mapping.status}</p>
+                                                        <p>Comment: ${mapping.comment}</p>
+                                                    </div>
+                                                </div>
+                                            </div>`;
+
+                            infoAccordionContent += mappingAccordion;
+                        });
+
+                        $('#sourcesContainer').html(sourceAccordionContent);
+                        $('#targetsContainer').html(targetAccordionContent);
+                        $('#otherInfo').html(infoAccordionContent);
+                    }
+                });
+
+            });
+
+            $('#deleteSelectedLinesButton').on('click', function () {
+                $('#confirmDeleteLinesModal').modal('show');
+            });
+
+            $('#closeConfirmDeleteLinesModal').on('click', function () {
+                $('#confirmDeleteLinesModal').modal('hide');
+            });
+
+            $('#confirmDeleteLinesModal button.btn-secondary').on('click', function () {
+                $('#confirmDeleteLinesModal').modal('hide');
+            });
+
+            $('#confirmDeleteLinesButton').on('click', function () {
+                var selectedMappings = [];
+
+                $("input.selected-mapping:checked").each(function () {
+                    var selectedMappingId = $(this).data("mapping-id");
+                    selectedMappings.push(selectedMappingId);
+                });
+
+                if (selectedMappings.length === 0) {
+                    return;
+                }
+
+                console.log(selectedMappings);
+
+                $.ajax({
+                    url: "/Mapping/DeleteSelectedMappings",
+                    method: "POST",
+                    data: { projectId: projectId, selectedMappings: selectedMappings },
+                    success: function (data) {
+                        window.location.reload();
+                    },
+                    error: function () {
+
+                    }
+                });
+                $('#confirmDeleteLinesModal').modal('hide');
+            });
+
+        });
+    </script>
 }

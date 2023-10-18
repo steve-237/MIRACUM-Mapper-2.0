@@ -87,7 +87,6 @@ namespace MIRACUM_Mapper.Controllers
                 }
             }
 
-
             return View("Index", project);
         }
 
