@@ -1,7 +1,8 @@
 ﻿/* Header - NavBar */
 .navbar-dark .navbar-nav .nav-link {
     color: white;
-    padding: 4px 25px
+    padding: 4px 25px;
+    cursor: pointer;
 }
 
 .navbar-dark .navbar-nav .nav-link:hover {
@@ -229,4 +230,8 @@ label {
 .description {
     color: #b7b3b3;
     font-size: small;
+}
+
+.editable-input{
+    width: 95px;
 }

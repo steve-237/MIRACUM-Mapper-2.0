@@ -276,7 +276,6 @@
                 var columnIndex = -1;
 
                 for (var i = 0; i < columnNames.length; i++) {
-                    console.log(columnNames[i].innerText);
                     if (columnNames[i].innerText === selectedColumn) {
                         columnIndex = i;
                         break;
@@ -423,8 +422,6 @@
                 if (selectedMappings.length === 0) {
                     return;
                 }
-
-                console.log(selectedMappings);
 
                 $.ajax({
                     url: "/Mapping/DeleteSelectedMappings",
