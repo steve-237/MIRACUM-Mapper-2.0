@@ -23,7 +23,7 @@
     </div>
     <div class="container-fluid">
         <div class="mt-3 mb-3"><h4>Edit Table : @Model.Name</h4></div>
-        <form method="post">
+        <form asp-action="Edit" method="post">
             <div class="justify-content-center align-items-center table-panel pt-2">
 
                 <div class="container-fluid">
@@ -35,14 +35,14 @@
                                         <th><input type="checkbox" id="selectAll"></th>
                                         @foreach (var source in Model.Mappings.First().Sources)
                                         {
-                                            <td>@source.Name Code (Source)</td>
-                                            <td>@source.Name Meaning (Source)</td>
+                                            <th>@source.Name Code (Source)</th>
+                                            <th>@source.Name Meaning (Source)</th>
                                         }
 
                                         @foreach (var target in Model.Mappings.First().Targets)
                                         {
-                                            <td>@target.Name Code (Target)</td>
-                                            <td>@target.Name Meaning (Target)</td>
+                                            <th>@target.Name Code (Target)</th>
+                                            <th>@target.Name Meaning (Target)</th>
                                         }
                                         @if (Model.DisplayStatus)
                                         {
@@ -56,29 +56,34 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var mapping in Model.Mappings)
+                                    
+                                    @for (int i = 0; i < Model.Mappings.Count; i++)
                                     {
-                                        <tr data-project-id="@Model.Id" data-mapping-id="@mapping.Id">
-                                            <td><input type="checkbox" class="selected-mapping select-all" name="selectedMappings" data-project-id="@Model.Id" data-mapping-id="@mapping.Id" /></td>
-                                            @foreach (var source in mapping.Sources)
+                                        <tr>
+                                            <td>
+                                                <input asp-for="@Model.Mappings[i].Id" type="hidden" />
+                                                <input  type="checkbox" class="selected-mapping select-all" name="selectedMappings" />
+                                            </td>
+                                            @for (int j = 0; j < Model.Mappings[i].Sources.Count; j++)
                                             {
-                                            <td><input asp-for="@source.Concept.Code" class="form-control input-width editable-input"></td>
-                                            <td><input asp-for="@source.Concept.Meaning" class="form-control input-width editable-input"></td>
+                                                <td><input asp-for="@Model.Mappings[i].Sources[j].Concept.Code" class="form-control input-width editable-input" /></td>
+                                                <td><input asp-for="@Model.Mappings[i].Sources[j].Concept.Meaning" class="form-control input-width editable-input" /></td>
                                             }
-                                            @foreach (var target in mapping.Targets)
+                                            @for (int j = 0; j < Model.Mappings[i].Targets.Count; j++)
                                             {
-                                            <td><input asp-for="@target.Concept.Code" class="form-control input-width editable-input"></td>
-                                            <td><input asp-for="@target.Concept.Meaning" class="form-control input-width editable-input"></td>
+                                                <td><input asp-for="@Model.Mappings[i].Targets[j].Concept.Code" class="form-control input-width editable-input" /></td>
+                                                <td><input asp-for="@Model.Mappings[i].Targets[j].Concept.Meaning" class="form-control input-width editable-input" /></td>
                                             }
+
                                             @if (Model.DisplayMappingEquivalence)
                                             {
-                                            <td><input asp-for="@mapping.Equivalence" class="form-control input-width editable-input"></td>
+                                                <td><input asp-for="@Model.Mappings[i].Equivalence" class="form-control input-width editable-input" /></td>
                                             }
                                             @if (Model.DisplayStatus)
                                             {
-                                            <td><input asp-for="@mapping.Status" class="form-control input-width editable-input"></td>
+                                                <td><input asp-for="@Model.Mappings[i].Status" class="form-control input-width editable-input" /></td>
                                             }
-                                        <td><input asp-for="@mapping.Comment" class="form-control input-width editable-input"></td>
+                                            <td><input asp-for="@Model.Mappings[i].Comment" class="form-control input-width editable-input" /></td>
                                         </tr>
                                     }
                                 </tbody>
@@ -145,7 +150,7 @@
                 paging: true,
                 responsive: true,
                 lengthMenu: [3, 5, 10, 25, 50],
-                pageLength: 3,
+                pageLength: 5,
                 searching: true,
                 pagingType: "full",
                 language: {
@@ -171,16 +176,12 @@
                 $("#loadingOverlay").hide();
             }, 50);
 
-            $(document).ready(function () {
-                $("#goBack").click(function () {
-                    window.history.back();
-                });
+            $("#goBack").click(function () {
+                window.history.back();
             });
 
-            $(document).ready(function () {
-                $("#saveButton").click(function () {
-                    $("#tableDataForm").submit();
-                });
+            $("#saveButton").click(function () {
+                $("#tableDataForm").submit();
             });
         });
     </script>

@@ -100,5 +100,25 @@ namespace MIRACUM_Mapper.Controllers
             return View(project);
         }
 
+        [HttpPost]
+        public IActionResult Edit(int Id, List<Mapping> Mappings)
+        {
+            if (Mappings != null)
+            {
+                var project = elements.FirstOrDefault(e => e.Id == Id);
+                if (project == null)
+                {
+                    return View("Error");
+                }
+
+                project.Mappings = Mappings;
+
+
+                return RedirectToAction("Index", new { id = Id });
+            }
+
+            return View("Edit", Mappings);
+        }
+
     }
 }
