@@ -71,6 +71,7 @@
                         <thead class="custom-thead-dark">
                             <tr>
                                 <th><input type="checkbox" id="selectAll"></th>
+                                <th>N°</th>
                                 @foreach (var source in Model.Mappings.First().Sources)
                                 {
                                     <td>@source.Name Code (Source)</td>
@@ -98,6 +99,7 @@
                             {
                                 <tr data-project-id="@Model.Id" data-mapping-id="@mapping.Id">
                                     <td><input type="checkbox" class="selected-mapping select-all" name="selectedMappings" data-project-id="@Model.Id" data-mapping-id="@mapping.Id" /></td>
+                                    <td>@(Model.Mappings.IndexOf(mapping) + 1)</td>
                                     @foreach(var source in mapping.Sources)
                                     {
                                         <td>@source.Concept.Code</td>

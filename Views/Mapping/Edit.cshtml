@@ -33,6 +33,7 @@
                                 <thead class="custom-thead-dark">
                                     <tr>
                                         <th><input type="checkbox" id="selectAll"></th>
+                                        <th>N°</th>
                                         @foreach (var source in Model.Mappings.First().Sources)
                                         {
                                             <th>@source.Name Code (Source)</th>
@@ -64,6 +65,7 @@
                                                 <input asp-for="@Model.Mappings[i].Id" type="hidden" />
                                                 <input  type="checkbox" class="selected-mapping select-all" name="selectedMappings" />
                                             </td>
+                                            <td>@(i + 1)</td>
                                             @for (int j = 0; j < Model.Mappings[i].Sources.Count; j++)
                                             {
                                                 <td><input asp-for="@Model.Mappings[i].Sources[j].Concept.Code" class="form-control input-width editable-input" /></td>
