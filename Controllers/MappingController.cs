@@ -20,5 +20,25 @@ namespace MIRACUM_Mapper.Controllers
         {
             return elements;
         }
+
+        [HttpPost]
+        public IActionResult FetchInfo(int projectId, List<int> selectedMappings)
+        {
+            var project = elements.FirstOrDefault(p => p.Id == projectId);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            var mappings = project.Mappings.Where(m => selectedMappings.Contains(m.Id)).ToList();
+
+            if (mappings == null)
+            {
+                return NotFound();
+            }
+
+            return Json(mappings);
+        }
     }
 }

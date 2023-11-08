@@ -77,28 +77,6 @@
                         "description": "Default response"
                     }
                 }
-            },
-            "post": {
-                "summary": "",
-                "description": "",
-                "parameters": [],
-                "operationId": "updateMapping",
-                "responses": {
-                    "default": {
-                        "description": "Default response"
-                    }
-                }
-            },
-            "delete": {
-                "summary": "",
-                "description": "",
-                "parameters": [],
-                "operationId": "deleteMapping",
-                "responses": {
-                    "default": {
-                        "description": "Default response"
-                    }
-                }
             }
         },
         "/project/{project_id}/mapping/{mapping_id}": {
@@ -120,7 +98,18 @@
                     }
                 }
             },
-            "post": {
+            "delete": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "operationId": "deleteMapping",
+                "responses": {
+                    "default": {
+                        "description": "Default response"
+                    }
+                }
+            },
+            "put": {
                 "summary": "",
                 "description": "",
                 "parameters": [],
@@ -138,17 +127,6 @@
                                 "$ref": "#/components/schemas/Mapping"
                             }
                         }
-                    }
-                }
-            },
-            "delete": {
-                "summary": "",
-                "description": "",
-                "parameters": [],
-                "operationId": "deleteMapping",
-                "responses": {
-                    "default": {
-                        "description": "Default response"
                     }
                 }
             }
@@ -171,6 +149,39 @@
                         }
                     }
                 }
+            },
+            "x-temp": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "operationId": "",
+                "responses": {
+                    "default": {
+                        "description": "Default response"
+                    }
+                }
+            },
+            "put": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "operationId": "editProject",
+                "responses": {
+                    "default": {
+                        "description": "Default response"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "",
+                "description": "",
+                "parameters": [],
+                "operationId": "deleteProject",
+                "responses": {
+                    "default": {
+                        "description": "Default response"
+                    }
+                }
             }
         }
     },
@@ -179,89 +190,99 @@
             "Project": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "sources": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
+                    "id": "int",
+                    "status": "boolean",
+                    "equivalence": "boolean",
+                    "description": "string",
+                    "name": "string",
+                    "mappings": {
+                        "type": "array of mapping",
+                        "id": "int",
+                        "sources": {
+                            "type": "list of source",
+                            "concept": {
+                                "code": {
                                     "type": "string"
                                 },
-                                "description": {
-                                    "type": "string"
-                                },
-                                "url": {
+                                "meaning": {
                                     "type": "string"
                                 }
-                            }
-                        }
-                    },
-                    "targets": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
+                            },
+                            "name": "string"
+                        },
+                        "targets": {
+                            "type": "list of target",
+                            "concept": {
+                                "code": {
                                     "type": "string"
                                 },
-                                "description": {
-                                    "type": "string"
-                                },
-                                "url": {
+                                "meaning": {
                                     "type": "string"
                                 }
-                            }
-                        }
+                            },
+                            "name": "string"
+                        },
+                        "equivalence": "string",
+                        "status": "string",
+                        "comment": "string"
                     }
                 }
             },
             "Mapping": {
                 "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string"
-                    },
-                    "status": {
-                        "type": "string"
-                    },
-                    "equivalence": {
-                        "type": "string"
-                    },
-                    "sources": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "key": {
-                                    "type": "string"
-                                },
-                                "value": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    },
-                    "targets": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "key": {
-                                    "type": "string"
-                                },
-                                "value": {
-                                    "type": "string"
-                                }
-                            }
+                "id": {
+                    "type": "string"
+                },
+                "sources": {
+                    "type": "array",
+                    "name": "string",
+                    "concept": {
+                        "type": "object",
+                        "code": "string",
+                        "meaning": "string"
+                    }
+                },
+                "targets": {
+                    "type": "array",
+                    "name": "string",
+                    "concept": {
+                        "type": "object",
+                        "code": {
+                            "type": "string"
+                        },
+                        "meaning": {
+                            "type": "string"
                         }
                     }
+                },
+                "status": {
+                    "type": "string"
+                },
+                "equivalence": {
+                    "type": "string"
+                },
+                "comment": "string"
+            },
+            "Source": {
+                "type": "object",
+                "name": "string",
+                "concept": {
+                    "code": "string",
+                    "meaning": "string"
                 }
+            },
+            "Target": {
+                "type": "object",
+                "name": "string",
+                "concept": {
+                    "code": "string",
+                    "meaning": "string"
+                }
+            },
+            "concept": {
+                "type": "object",
+                "code": "string",
+                "meaning": "string"
             }
         },
         "requestBodies": {

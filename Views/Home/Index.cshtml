@@ -54,6 +54,7 @@
                                         <div class="title">
                                             <a asp-controller="Mapping" asp-action="Index" asp-route-id="@element.Id" class="text-decoration-none title"><h5 class="name-field">@element.Name</h5></a><br>
                                             <p class="version">Version : <span class="version-field">@element.Version</span></p>
+                                            <h6 class="description">@element.Description</h6>
                                         </div>
                                         <div>
 
@@ -113,7 +114,7 @@
 
             setTimeout(function () {
                 $("#loadingOverlay").hide();
-            }, 1000);
+            }, 50);
 
             // Customised DataTables search
             $("#customSearchButton").on("click", function () {

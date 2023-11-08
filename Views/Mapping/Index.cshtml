@@ -70,7 +70,7 @@
                     <table id="mappingTable" class="table">
                         <thead class="custom-thead-dark">
                             <tr>
-                                <th><input type="checkbox" id="selectAll" onclick="toggleCheckboxes()"></th>
+                                <th><input type="checkbox" id="selectAll"></th>
                                 @foreach (var source in Model.Mappings.First().Sources)
                                 {
                                     <td>@source.Name Code (Source)</td>
@@ -96,12 +96,18 @@
                         <tbody>
                             @foreach (var mapping in Model.Mappings)
                             {
-                                <tr>
-                                    <td><input type="checkbox" name="selection" class="select-all" /></td>
-                                    <td>@mapping.Sources.First().Concept.Code</td>
-                                    <td>@mapping.Sources.First().Concept.Meaning</td>
-                                    <td>@mapping.Targets.First().Concept.Code</td>
-                                    <td>@mapping.Targets.First().Concept.Meaning</td>
+                                <tr data-project-id="@Model.Id" data-mapping-id="@mapping.Id">
+                                    <td><input type="checkbox" class="selected-mapping select-all" name="selectedMappings" data-project-id="@Model.Id" data-mapping-id="@mapping.Id" /></td>
+                                    @foreach(var source in mapping.Sources)
+                                    {
+                                        <td>@source.Concept.Code</td>
+                                        <td>@source.Concept.Meaning</td>
+                                    }
+                                    @foreach (var target in mapping.Targets)
+                                    {
+                                        <td>@target.Concept.Code</td>
+                                        <td>@target.Concept.Meaning</td>
+                                    }
                                     @if (Model.DisplayMappingEquivalence)
                                     {
                                         <td>@mapping.Equivalence</td>
@@ -186,23 +192,7 @@
                                 <div id="sourcesCollapse" class="collapse" aria-labelledby="sourcesHeader" data-parent="#sourcesAccordion">
                                     <div class="card-body" style="background-color: #D9D9D9;">
                                         <div class="accordion" id="sourceAccordion">
-                                            <div class="card">
-                                                <div class="card-header" id="sourceHeader">
-                                                    <h6 class="mb-0 cursor">
-                                                        <a data-toggle="collapse" data-target="#sourceCollapse" aria-expanded="true" aria-controls="sourceCollapse">
-                                                            Source 1
-                                                        </a>
-                                                    </h6>
-                                                </div>
-
-                                                <div id="sourceCollapse" class="collapse" aria-labelledby="sourceHeader" data-parent="#sourceAccordion">
-                                                    <div class="card-body bg-light">
-                                                        <p>Name : Property of Source 1</p>
-                                                        <p>Description : Property of Source 1</p>
-                                                        <p>URL : Property of Source 1</p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div class="accordion" id="sourcesContainer"></div>
                                         </div>
 
                                     </div>
@@ -222,23 +212,7 @@
                                 <div id="targetsCollapse" class="collapse" aria-labelledby="targetsHeader" data-parent="#targetsAccordion">
                                     <div class="card-body" style="background-color: #D9D9D9;">
                                         <div class="accordion" id="targetAccordion">
-                                            <div class="card">
-                                                <div class="card-header" id="targetHeader">
-                                                    <h6 class="mb-0 cursor">
-                                                        <a data-toggle="collapse" data-target="#targetCollapse" aria-expanded="true" aria-controls="targetCollapse">
-                                                            Target 1
-                                                        </a>
-                                                    </h6>
-                                                </div>
-
-                                                <div id="targetCollapse" class="collapse" aria-labelledby="targetHeader" data-parent="#targetAccordion">
-                                                    <div class="card-body bg-light">
-                                                        <p>Name : Property of Target 1</p>
-                                                        <p>Description : Property of Target 1</p>
-                                                        <p>URL : Property of Target 1</p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div class="accordion" id="targetsContainer"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -246,6 +220,7 @@
                         </div>
                         <div class="mt-3">
                             <h5>Other Information</h5>
+                            <div id="otherInfo"></div>
                         </div>
                     </div>
                 </div>
@@ -256,16 +231,7 @@
 
 @section scripts {
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
-    <script>
-        function toggleCheckboxes() {
-            var checkboxes = document.querySelectorAll('.select-all');
-            var selectAllCheckbox = document.getElementById('selectAll');
-
-            checkboxes.forEach(function (checkbox) {
-                checkbox.checked = selectAllCheckbox.checked;
-            });
-        }
-    </script>
+    
     <script>
         $(document).ready(function () {
             // DataTables
@@ -298,7 +264,7 @@
 
             setTimeout(function () {
                 $("#loadingOverlay").hide();
-            }, 1000);
+            }, 50);
 
             $('#customSearchInput').on('input', function () {
                 var columnNames = table.columns().header().toArray();
@@ -322,6 +288,109 @@
                         table.search(searchText).draw();
                     });
                 }
+            });
+
+            //to show the details of mapping table line
+            $("#selectAll").click(function () {
+                $("input.selected-mapping").prop('checked', this.checked);
+            });
+
+            $("table#mappingTable tbody tr").on("click", function () {
+                $("#selectAll").prop("checked", false);
+
+                var projectId = $(this).data("project-id");
+                var mappingId = $(this).data("mapping-id");
+
+                var selectedMappings = [];
+
+                $("input.selected-mapping:checked").each(function () {
+                    var selectedMappingId = $(this).data("mapping-id");
+                    selectedMappings.push(selectedMappingId);
+                });
+
+                $.ajax({
+                    url: "/Mapping/FetchInfo",
+                    type: "POST",
+                    data: { projectId: projectId, selectedMappings: selectedMappings },
+                    success: function (data) {
+
+                        var infoAccordionContent = '';
+                        var sourceAccordionContent = '';
+                        var targetAccordionContent = '';
+
+                        data.forEach(function (mapping, index) {
+                            var mappingId = mapping.Id;
+
+                            mapping.sources.forEach(function (source, index) {
+                                var sourceAccordion = `
+                                            <div class="card">
+                                                <div class="card-header" id="source${index}">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link" data-toggle="collapse" data-target="#sourceContent${index}">
+                                                             Source ${index + 1} : ${source.name}
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                                <div id="sourceContent${index}" class="collapse" aria-labelledby="source${index}" data-parent="#accordion">
+                                                    <div class="card-body">
+                                                        <p>Code: ${source.concept.code}</p>
+                                                        <p>Meaning: ${source.concept.meaning}</p>
+                                                    </div>
+                                                </div>
+                                            </div>`;
+
+                                sourceAccordionContent += sourceAccordion;
+                            });
+
+                            mapping.targets.forEach(function (target, index) {
+                                var targetAccordion = `
+                                                    <div class="card">
+                                                        <div class="card-header" id="target${index}">
+                                                            <h5 class="mb-0">
+                                                                <button class="btn btn-link" data-toggle="collapse" data-target="#targetContent${index}">
+                                                                    Target ${index + 1} : ${target.name}
+                                                                </button>
+                                                            </h5>
+                                                        </div>
+                                                                        <div id="targetContent${index}" class="collapse" aria-labelledby="target${index}" data-parent="#accordion">
+                                                            <div class="card-body">
+                                                                <p>Code: ${target.concept.code}</p>
+                                                                <p>Meaning: ${target.concept.meaning}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    `;
+
+                                targetAccordionContent += targetAccordion;
+                            });
+
+                            var mappingAccordion = `
+                                    <div class="card">
+                                        <div class="card-header" id="mappingHeader${index}">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link" data-toggle="collapse" data-target="#mappingContent${index}">
+                                                   Remaining Information ${index + 1}
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <div id="mappingContent${index}" class="collapse" aria-labelledby="mappingHeader${index}" data-parent="#accordion">
+                                            <div class="card-body">
+                                                <p>ID: ${mapping.id}</p>
+                                                <p>Equivalence: ${mapping.equivalence}</p>
+                                                <p>Status: ${mapping.status}</p>
+                                                <p>Comment: ${mapping.comment}</p>
+                                            </div>
+                                        </div>
+                                    </div>`;
+
+                            infoAccordionContent += mappingAccordion;
+                        });
+
+                        $('#sourcesContainer').html(sourceAccordionContent);
+                        $('#targetsContainer').html(targetAccordionContent);
+                        $('#otherInfo').html(infoAccordionContent);
+                    }
+                });
             });
         });
     </script>
