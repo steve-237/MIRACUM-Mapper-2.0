@@ -24,38 +24,35 @@
             <div class="col">
                 <div class="form-group d-flex m-3 justify-content-center">
                     <div class="col-6 pr-1 position-relative">
-                        <div class="input-group">
-                            <input type="text" id="customSearchInput" class="form-control" placeholder="Search for a project...">
-                            <div class="input-group-append">
-                                <button class="btn btn-secondary" type="button" id="filterButton">Filter</button>
-                            </div>
+                        <div class="d-flex">
+                            <input type="text" id="customSearchInput" class="form-control" placeholder="Filter the Mapping Table...">
                             <select class="custom-select" id="columnFilter">
-                                <option value="">All Columns</option>
+                                <option value="all">Filter By All Columns</option>
                                 @if (Model.Mappings.First().Sources != null && Model.Mappings.First().Sources.Any())
                                 {
                                     @foreach (var source in Model.Mappings.First().Sources)
                                     {
-                                        <option value="@source.Name Code">@source.Name Code</option>
-                                        <option value="@source.Name Meaning">@source.Name Meaning</option>
+                                        <option value="@source.Name Code (Source)">@source.Name Code (Source)</option>
+                                        <option value="@source.Name Meaning (Source)">@source.Name Meaning (Source)</option>
                                     }
                                 }
                                 @if (Model.Mappings.First().Targets != null && Model.Mappings.First().Targets.Any())
                                 {
                                     @foreach (var target in Model.Mappings.First().Targets)
                                     {
-                                        <option value="@target.Name Code">@target.Name Code</option>
-                                        <option value="">@target.Name Meaning</option>
+                                        <option value="@target.Name Code (Target)">@target.Name Code (Target)</option>
+                                        <option value="@target.Name Meaning (Target)">@target.Name Meaning (Target)</option>
                                     }
                                 }
                                 @if (Model.DisplayStatus)
                                 {
-                                    <option value="status">Status</option>
+                                    <option value="Status">Status</option>
                                 }
                                 @if (Model.DisplayMappingEquivalence)
                                 {
-                                    <option value="equivalence">Equivalence</option>
+                                    <option value="Equivalence">Equivalence</option>
                                 }
-                                <option value="comment">Comment</option>
+                                <option value="Comment">Comment</option>
                             </select>
                         </div>
                     </div>
@@ -123,21 +120,54 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-body p-3" style="background-color: #D9D9D9;">
-                        <h5>@Model.Name</h5>
-                        <p>Version : @Model.Version</p>
-                        <p>Description : @Model.Description</p>
-                        <p>Number of Sources : @Model.Mappings.First().Sources.Count</p>
-                        <p>Number of Targets : @Model.Mappings.First().Targets.Count</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>@Model.Name</h5>
+                                <p>Version : @Model.Version</p>
+                                <p>Description : @Model.Description</p>
+                                <p>Number of Sources : @Model.Mappings.First().Sources.Count</p>
+                                <p>Number of Targets : @Model.Mappings.First().Targets.Count</p>
+                                <button type="button" class="btn btn-danger">Delete Project</button>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3 text-right">
+                                    <button type="button" class="btn btn-warning">Edit Mapping</button>
+                                    <button type="button" class="btn ml-3 btn-warning">Auto Map</button>
+                                </div>
+                                <div>
+                                    <h6 class="mb-2">Project Members</h6>
+                                    <table class="table table-light table-bordered">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Role</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>John Doe</td>
+                                                <td>Project Owner</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Jane Smith</td>
+                                                <td>Reviewer</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-body p-3" style="background-color: #D9D9D9;">
-
-                        <h5>Selected Line Properties</h5>
-
-                        <div class="accordion" id="sourcesTargetsAccordion">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>Selected Line Properties</h5>
+                            <button type="button" class="btn btn-danger mb-3">Delete Line</button>
+                        </div>
+                        <div class="accordion" id="sourcesAccordion">
                             <div class="card">
                                 <div class="card-header" id="sourcesHeader">
                                     <h6 class="mb-0 cursor">
@@ -147,8 +177,8 @@
                                     </h6>
                                 </div>
 
-                                <div id="sourcesCollapse" class="collapse" aria-labelledby="sourcesHeader" data-parent="#sourcesTargetsAccordion">
-                                    <div class="card-body bg-light">
+                                <div id="sourcesCollapse" class="collapse" aria-labelledby="sourcesHeader" data-parent="#sourcesAccordion">
+                                    <div class="card-body" style="background-color: #D9D9D9;">
                                         <div class="accordion" id="sourceAccordion">
                                             <div class="card">
                                                 <div class="card-header" id="sourceHeader">
@@ -172,7 +202,8 @@
                                     </div>
                                 </div>
                             </div>
-
+                        </div>
+                        <div class="accordion" id="targetsAccordion">
                             <div class="card">
                                 <div class="card-header" id="targetsHeader">
                                     <h6 class="mb-0 cursor">
@@ -182,8 +213,8 @@
                                     </h6>
                                 </div>
 
-                                <div id="targetsCollapse" class="collapse" aria-labelledby="targetsHeader" data-parent="#sourcesTargetsAccordion">
-                                    <div class="card-body bg-light">
+                                <div id="targetsCollapse" class="collapse" aria-labelledby="targetsHeader" data-parent="#targetsAccordion">
+                                    <div class="card-body" style="background-color: #D9D9D9;">
                                         <div class="accordion" id="targetAccordion">
                                             <div class="card">
                                                 <div class="card-header" id="targetHeader">
@@ -207,7 +238,9 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="mt-3">
+                            <h5>Other Information</h5>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -231,7 +264,7 @@
         $(document).ready(function () {
             // DataTables
             var table = $('#mappingTable').DataTable({
-                dom: 'rt<"d-flex" <"bottom col-md-7 mr-5"> <"bottom p-0 m-2"l><"bottom ml-5 p-0"i><"bottom ml-5 p-0"p>><"clear">',
+                dom: 'rt<"d-flex" <"bottom col-md-7 mr-4"> <"bottom p-0 m-2"l><"bottom ml-5 p-0"i><"bottom ml-5 p-0"p>><"clear">',
                 paging: true,
                 responsive: true,
                 lengthMenu: [3, 5, 10, 25, 50],
@@ -254,30 +287,28 @@
                 }
             });
 
-            // Customised DataTables search
-            $("#customSearchButton").on("click", function () {
-                var searchText = $("#customSearchInput").val().toLowerCase();
-                table.search(searchText).draw();
-            });
-
-            // Update the search each time you enter data to trigger it in real time
-            $("#customSearchInput").on("input", function () {
-                var searchText = $(this).val().toLowerCase();
-                table.search(searchText).draw();
-            });
-
-            $('#columnFilter').change(function () {
-                var selectedColumn = $(this).val();
-                var searchText = $('#customSearchInput').val().toLowerCase();
-                var columnIndex = table.column(selectedColumn + ':name').index();
-                table.column(columnIndex).search(searchText).draw();
-            });
-
             $('#customSearchInput').on('input', function () {
+                var columnNames = table.columns().header().toArray();
                 var selectedColumn = $('#columnFilter').val();
-                var searchText = $(this).val().toLowerCase();
-                var columnIndex = table.column(selectedColumn + ':name').index();
-                table.column(columnIndex).search(searchText).draw();
+                var columnIndex = -1;
+
+                for (var i = 0; i < columnNames.length; i++) {
+                    console.log(columnNames[i].innerText);
+                    if (columnNames[i].innerText === selectedColumn) {
+                        columnIndex = i;
+                        break;
+                    }
+                }
+
+                if (columnIndex !== -1) {
+                    var searchText = $(this).val().toLowerCase();
+                    table.column(columnIndex).search(searchText).draw();
+                } else {
+                    $("#customSearchInput").on("input", function () {
+                        var searchText = $(this).val().toLowerCase();
+                        table.search(searchText).draw();
+                    });
+                }
             });
         });
     </script>
