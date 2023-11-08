@@ -18,6 +18,12 @@
 }
 
 <div class="container-fluid h-100 d-flex flex-column justify-content-center align-items-center card mb-5">
+    <div id="loadingOverlay" class="loading-overlay">
+        <div>
+            <p>Data is being loaded...</p>
+            <div class="spinner"></div>
+        </div>
+    </div>
     <div class="container-fluid">
         <div class="mt-3 mb-3"><h4>Mapping Table : @Model.Name</h4></div>
         <div class="justify-content-center align-items-center table-panel pt-2">
@@ -91,7 +97,7 @@
                             @foreach (var mapping in Model.Mappings)
                             {
                                 <tr>
-                                    <td><input type="checkbox" name="selection" class="select-all"/></td>
+                                    <td><input type="checkbox" name="selection" class="select-all" /></td>
                                     <td>@mapping.Sources.First().Concept.Code</td>
                                     <td>@mapping.Sources.First().Concept.Meaning</td>
                                     <td>@mapping.Targets.First().Concept.Code</td>
@@ -286,6 +292,13 @@
                     "infoFiltered": ""
                 }
             });
+
+            //for the spinner
+            $("#loadingOverlay").show();
+
+            setTimeout(function () {
+                $("#loadingOverlay").hide();
+            }, 1000);
 
             $('#customSearchInput').on('input', function () {
                 var columnNames = table.columns().header().toArray();

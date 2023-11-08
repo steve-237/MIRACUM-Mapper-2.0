@@ -21,6 +21,12 @@
 @await Html.PartialAsync("_CreateProjectModal", new Project())
 
 <div class="container-fluid h-100 d-flex flex-column justify-content-center align-items-center card mb-5">
+    <div id="loadingOverlay" class="loading-overlay">
+        <div>
+            <p>Data is being loaded...</p>
+            <div class="spinner"></div>
+        </div>
+    </div>
     <div class="container-fluid dashboard">
         <div class="row justify-content-center align-items-center">
             <div class="col">
@@ -101,6 +107,13 @@
                     "infoFiltered": ""
                 }
             });
+
+            //for the spinner
+            $("#loadingOverlay").show();
+
+            setTimeout(function () {
+                $("#loadingOverlay").hide();
+            }, 1000);
 
             // Customised DataTables search
             $("#customSearchButton").on("click", function () {
