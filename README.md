@@ -33,3 +33,28 @@ In the "clone a deposit" window, paste the GitHub project URL in the provided ar
 ## Running the Project with Visual Studio
 
 after opening the application in the IDE (Visual Studio), simply use the keyboard shortcut **crtl + F5** to run the project in no-debug mode, or click directly on the **start** button. once the project has been run, it will open in the browser. 
+
+## Clone the project and build the Docker Image 
+
+To begin using Docker, start by installing Docker Desktop from the official website and verifying its successful installation. If you're on Windows, ensure that virtualization is enabled in your BIOS settings. The following steps allow you to clone this project locally and create a Docker image of the project, then run it.
+
+1. Open your terminal or command-line interface and run the following command to clone the project repository from GitHub:
+```
+git clone https://github.com/steve-237/MIRACUM-Mapper-2.0.git
+```
+2. Change the directory to access the project folder you just cloned:
+```
+cd MIRACUM-Mapper-2.0
+```
+3. Use the Docker command to build the image from the Dockerfile. Ensure you are in the project directory where the Dockerfile is located:
+```
+docker build -t miracum-mapper:2.0 .
+```
+4. Start a container based on the image you just built. You can specify the ports according to your requirements:
+```
+docker run -p 8080:80 -p 443:443 miracum-mapper:2.0
+```
+5. Open a web browser and go to the following address:
+```
+http://localhost:8080
+```
