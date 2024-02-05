@@ -32,7 +32,7 @@ In the "clone a deposit" window, paste the GitHub project URL in the provided ar
 
 ## Running the Project with Visual Studio
 
-after opening the application in the IDE (Visual Studio), simply use the keyboard shortcut **crtl + F5** to run the project in no-debug mode, or click directly on the **start** button. once the project has been run, it will open in the browser. 
+After opening the application in the IDE (Visual Studio), simply use the keyboard shortcut **crtl + F5** to run the project in no-debug mode, or click directly on the **start** button. Once the project has been run, it will open in the browser. 
 
 ## Clone the project and build the Docker Image 
 
