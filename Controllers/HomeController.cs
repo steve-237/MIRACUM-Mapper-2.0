@@ -27,9 +27,13 @@ namespace MIRACUM_Mapper.Controllers
         [HttpPost]
         public IActionResult Create(Project project)
         {
-            elements.Add(project);
-            var newElements = elements;
-            return View("Index", newElements);
+            if (ModelState.IsValid)
+            {
+                elements.Add(project);
+                var newElements = elements;
+                return View("Index", newElements);
+            }
+            return View("Index", elements);
         }
 
         [HttpPost]

@@ -93,7 +93,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 1",
                                 Concept = new Concept
                                 {
                                     Code = "A01.1",
@@ -102,7 +102,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 2",
                                 Concept = new Concept
                                 {
                                     Code = "B02.2",
@@ -111,7 +111,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 3",
                                 Concept = new Concept
                                 {
                                     Code = "C03.3",
@@ -123,7 +123,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 1",
                                 Concept = new Concept
                                 {
                                     Code = "C0001234",
@@ -132,7 +132,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 2",
                                 Concept = new Concept
                                 {
                                     Code = "C0005678",
@@ -141,7 +141,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 3",
                                 Concept = new Concept
                                 {
                                     Code = "C0009876",
@@ -160,7 +160,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 1",
                                 Concept = new Concept
                                 {
                                     Code = "D04.4",
@@ -169,7 +169,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 2",
                                 Concept = new Concept
                                 {
                                     Code = "E05.5",
@@ -178,7 +178,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 3",
                                 Concept = new Concept
                                 {
                                     Code = "F06.6",
@@ -190,7 +190,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 1",
                                 Concept = new Concept
                                 {
                                     Code = "C0012345",
@@ -199,7 +199,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 2",
                                 Concept = new Concept
                                 {
                                     Code = "C0056789",
@@ -208,7 +208,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 3",
                                 Concept = new Concept
                                 {
                                     Code = "C0098765",
@@ -227,7 +227,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 1",
                                 Concept = new Concept
                                 {
                                     Code = "G07.7",
@@ -236,7 +236,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 2",
                                 Concept = new Concept
                                 {
                                     Code = "H08.8",
@@ -245,7 +245,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 3",
                                 Concept = new Concept
                                 {
                                     Code = "I09.9",
@@ -257,7 +257,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 1",
                                 Concept = new Concept
                                 {
                                     Code = "C0123456",
@@ -266,7 +266,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 2",
                                 Concept = new Concept
                                 {
                                     Code = "C0456789",
@@ -275,7 +275,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 3",
                                 Concept = new Concept
                                 {
                                     Code = "C0987654",
@@ -294,7 +294,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 1",
                                 Concept = new Concept
                                 {
                                     Code = "J10.0",
@@ -303,7 +303,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 2",
                                 Concept = new Concept
                                 {
                                     Code = "K20.9",
@@ -312,7 +312,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 3",
                                 Concept = new Concept
                                 {
                                     Code = "L30.9",
@@ -324,7 +324,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 1",
                                 Concept = new Concept
                                 {
                                     Code = "C0222222",
@@ -333,7 +333,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 2",
                                 Concept = new Concept
                                 {
                                     Code = "C0333333",
@@ -342,7 +342,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 3",
                                 Concept = new Concept
                                 {
                                     Code = "C0444444",
@@ -361,7 +361,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 1",
                                 Concept = new Concept
                                 {
                                     Code = "M12.3",
@@ -370,7 +370,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 2",
                                 Concept = new Concept
                                 {
                                     Code = "N12.0",
@@ -379,7 +379,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Source
                             {
-                                Name = "ICD-10",
+                                Name = "ICD-10 3",
                                 Concept = new Concept
                                 {
                                     Code = "O12.4",
@@ -391,7 +391,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 1",
                                 Concept = new Concept
                                 {
                                     Code = "C0555555",
@@ -400,7 +400,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 2",
                                 Concept = new Concept
                                 {
                                     Code = "C0666666",
@@ -409,7 +409,7 @@ namespace MIRACUM_Mapper.db
                             },
                             new Target
                             {
-                                Name = "UMLS",
+                                Name = "UMLS 3",
                                 Concept = new Concept
                                 {
                                     Code = "C0777777",
