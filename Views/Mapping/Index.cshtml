@@ -9,10 +9,10 @@
             <a asp-controller="Home" asp-action="Index" class="nav-link">Projects List</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Edit This Project</a>
+            <a class="nav-link disabled" href="#" title="This feature will be implemented later">Edit This Project</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Create New Project From This</a>
+            <a class="nav-link disabled" href="#" title="This feature will be implemented later">Create New Project From This</a>
         </li>
     </ul>
 }
@@ -149,7 +149,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3 text-right">
                                     <a asp-controller="Mapping" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit Mapping</a>
-                                    <button type="button" class="btn ml-3 btn-warning">Auto Map</button>
+                                    <button type="button" disabled title="This feature will be implemented later" class="btn ml-3 btn-warning">Auto Map</button>
                                 </div>
                                 <div>
                                     <h6 class="mb-2">Project Members</h6>
