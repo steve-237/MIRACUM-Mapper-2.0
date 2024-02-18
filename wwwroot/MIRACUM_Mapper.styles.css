@@ -231,3 +231,10 @@ label {
     color: #b7b3b3;
     font-size: small;
 }
+
+a.disabled {
+    color: #999;
+    pointer-events: none;
+    text-decoration: none;
+    cursor: not-allowed;
+}
