@@ -68,8 +68,8 @@
                                             <td>@(i + 1)</td>
                                             @for (int j = 0; j < Model.Mappings[i].Sources.Count; j++)
                                             {
-                                                <td><input asp-for="@Model.Mappings[i].Sources[j].Concept.Code" class="form-control" /></td>
-                                                <td><input asp-for="@Model.Mappings[i].Sources[j].Concept.Meaning" class="form-control" /></td>
+                                                <td>@Model.Mappings[i].Sources[j].Concept.Code</td>
+                                                <td>@Model.Mappings[i].Sources[j].Concept.Meaning</td>
                                             }
                                             @for (int j = 0; j < Model.Mappings[i].Targets.Count; j++)
                                             {
