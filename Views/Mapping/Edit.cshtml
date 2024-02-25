@@ -70,6 +70,8 @@
                                             {
                                                 <td>@Model.Mappings[i].Sources[j].Concept.Code</td>
                                                 <td>@Model.Mappings[i].Sources[j].Concept.Meaning</td>
+                                                <input type="hidden" asp-for="@Model.Mappings[i].Sources[j].Concept.Code" />
+                                                <input type="hidden" asp-for="@Model.Mappings[i].Sources[j].Concept.Meaning" />
                                             }
                                             @for (int j = 0; j < Model.Mappings[i].Targets.Count; j++)
                                             {

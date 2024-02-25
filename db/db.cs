@@ -8,7 +8,7 @@ namespace MIRACUM_Mapper.db
         {
             new Project
             {
-                Id = 0,
+                Id = 9,
                 Name = "Creative Mapping Endeavor",
                 Version = 1.09f,
                 Description = "Exploration of Complex Mapping between LOINC, SNOMED-CT, and UMLS to Other Terminologies",
@@ -716,6 +716,298 @@ namespace MIRACUM_Mapper.db
                         Equivalence = "Equivalent",
                         Status = "Actif",
                         Comment = "Mapping valid"
+                    }
+                }
+            },
+            new Project
+            {
+                Id = 6,
+                Name = "Mapping Laborcode-SNOMED-CT Project",
+                Version = 1.0f,
+                Description = "Mapping between Laborcode and SNOMED-CT",
+                DisplayMappingEquivalence = true,
+                DisplayStatus = true,
+                Mappings = new List<Mapping>
+                {
+                    new Mapping
+                    {
+                        Id = 1,
+                        Sources = new List<Source>
+                        {
+                            new Source
+                            {
+                                Name = "Laborcode",
+                                Concept = new Concept
+                                {
+                                    Code = "5LEU",
+                                    Meaning = "Laboratory test for urinary electrolytes"
+                                }
+                            },
+                        },
+                        Targets = new List<Target>
+                        {
+                            new Target
+                            {
+                                Name = "SNOMED-CT",
+                                Concept = new Concept()
+                            }
+                        },
+                        Equivalence = "Partial",
+                        Status = "Pending",
+                        Comment = "Initial mapping in progress"
+                    },
+                    new Mapping
+                    {
+                        Id = 1,
+                        Sources = new List<Source>
+                        {
+                            new Source
+                            {
+                                Name = "Laborcode",
+                                Concept = new Concept
+                                {
+                                    Code = "3FXP",
+                                    Meaning = "Test for urinary electrolyte levels"
+                                }
+                            }
+                        },
+                        Targets = new List<Target>
+                        {
+                            new Target
+                            {
+                                Name = "SNOMED-CT",
+                                Concept = new Concept()
+                            }
+                        },
+                        Equivalence = "Partial",
+                        Status = "Pending",
+                        Comment = "Initial mapping in progress"
+                    },
+                    new Mapping
+                    {
+                        Id = 2,
+                        Sources = new List<Source>
+                        {
+                            new Source
+                            {
+                                Name = "LabTest",
+                                Concept = new Concept
+                                {
+                                    Code = "9QWE",
+                                    Meaning = "Electrolyte test in urine"
+                                }
+                            }
+                        },
+                        Targets = new List<Target>
+                        {
+                            new Target
+                            {
+                                Name = "SNOMED-CT",
+                                Concept = new Concept()
+                            }
+                        },
+                        Equivalence = "Partial",
+                        Status = "Pending",
+                        Comment = "Initial mapping in progress"
+                    },
+                    new Mapping
+                    {
+                        Id = 3,
+                        Sources = new List<Source>
+                        {
+                            new Source
+                            {
+                                Name = "UrineTestCode",
+                                Concept = new Concept
+                                {
+                                    Code = "5GHT",
+                                    Meaning = "Electrolyte analysis in urine"
+                                }
+                            }
+                        },
+                        Targets = new List<Target>
+                        {
+                            new Target
+                            {
+                                Name = "SNOMED-CT",
+                                Concept = new Concept()
+                            }
+                        },
+                        Equivalence = "Partial",
+                        Status = "Pending",
+                        Comment = "Initial mapping in progress"
+                    }
+                }
+            },
+            new Project
+            {
+                Id = 7,
+                Name = "Laborcode Mapping Project",
+                Version = 1.0f,
+                Description = "Mapping between Laborcode, SNOMED-CT and LOINC",
+                DisplayMappingEquivalence = true,
+                DisplayStatus = true,
+                Mappings = new List<Mapping>
+                {
+                    new Mapping
+                    {
+                        Id = 1,
+                        Sources = new List<Source>
+                        {
+                            new Source
+                            {
+                                Name = "Laborcode",
+                                Concept = new Concept
+                                {
+                                    Code = "3FXP",
+                                    Meaning = "Test for urinary electrolyte levels"
+                                }
+                            }
+                        },
+                        Targets = new List<Target>
+                        {
+                            new Target
+                            {
+                                Name = "SNOMED-CT",
+                                Concept = new Concept()
+                            },
+                            new Target
+                            {
+                                Name = "LOINC",
+                                Concept = new Concept()
+                            }
+                        },
+                        Equivalence = "Partial",
+                        Status = "Pending",
+                        Comment = "Initial mapping in progress"
+                    },
+                    new Mapping
+                    {
+                        Id = 2,
+                        Sources = new List<Source>
+                        {
+                            new Source
+                            {
+                                Name = "LabTest",
+                                Concept = new Concept
+                                {
+                                    Code = "9QWE",
+                                    Meaning = "Electrolyte test in urine"
+                                }
+                            }
+                        },
+                        Targets = new List<Target>
+                        {
+                            new Target
+                            {
+                                Name = "SNOMED-CT",
+                                Concept = new Concept()
+                            },
+                            new Target
+                            {
+                                Name = "LOINC",
+                                Concept = new Concept()
+                            }
+                        },
+                        Equivalence = "Partial",
+                        Status = "Pending",
+                        Comment = "Initial mapping in progress"
+                    },
+                    new Mapping
+                    {
+                        Id = 3,
+                        Sources = new List<Source>
+                        {
+                            new Source
+                            {
+                                Name = "UrineTestCode",
+                                Concept = new Concept
+                                {
+                                    Code = "5GHT",
+                                    Meaning = "Electrolyte analysis in urine"
+                                }
+                            }
+                        },
+                        Targets = new List<Target>
+                        {
+                            new Target
+                            {
+                                Name = "SNOMED-CT",
+                                Concept = new Concept()
+                            },
+                            new Target
+                            {
+                                Name = "LOINC",
+                                Concept = new Concept()
+                            }
+                        },
+                        Equivalence = "Partial",
+                        Status = "Pending",
+                        Comment = "Initial mapping in progress"
+                    },
+                    new Mapping
+                    {
+                        Id = 4,
+                        Sources = new List<Source>
+                        {
+                            new Source
+                            {
+                                Name = "UrinalysisCode",
+                                Concept = new Concept
+                                {
+                                    Code = "7MNL",
+                                    Meaning = "Test for urinary electrolytes"
+                                }
+                            }
+                        },
+                        Targets = new List<Target>
+                        {
+                            new Target
+                            {
+                                Name = "SNOMED-CT",
+                                Concept = new Concept()
+                            },
+                            new Target
+                            {
+                                Name = "LOINC",
+                                Concept = new Concept()
+                            }
+                        },
+                        Equivalence = "Partial",
+                        Status = "Pending",
+                        Comment = "Initial mapping in progress"
+                    },
+                    new Mapping
+                    {
+                        Id = 5,
+                        Sources = new List<Source>
+                        {
+                            new Source
+                            {
+                                Name = "ElectrolyteTest",
+                                Concept = new Concept
+                                {
+                                    Code = "2KLO",
+                                    Meaning = "Analysis of electrolytes in urine"
+                                }
+                            }
+                        },
+                        Targets = new List<Target>
+                        {
+                            new Target
+                            {
+                                Name = "SNOMED-CT",
+                                Concept = new Concept()
+                            },
+                            new Target
+                            {
+                                Name = "LOINC",
+                                Concept = new Concept()
+                            }
+                        },
+                        Equivalence = "Partial",
+                        Status = "Pending",
+                        Comment = "Initial mapping in progress"
                     }
                 }
             }
