@@ -790,7 +790,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Source
                             {
-                                Name = "LabTest",
+                                Name = "Laborcode",
                                 Concept = new Concept
                                 {
                                     Code = "9QWE",
@@ -817,7 +817,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Source
                             {
-                                Name = "UrineTestCode",
+                                Name = "Laborcode",
                                 Concept = new Concept
                                 {
                                     Code = "5GHT",
@@ -888,7 +888,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Source
                             {
-                                Name = "LabTest",
+                                Name = "Laborcode",
                                 Concept = new Concept
                                 {
                                     Code = "9QWE",
@@ -920,7 +920,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Source
                             {
-                                Name = "UrineTestCode",
+                                Name = "Laborcode",
                                 Concept = new Concept
                                 {
                                     Code = "5GHT",
@@ -952,7 +952,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Source
                             {
-                                Name = "UrinalysisCode",
+                                Name = "Laborcode",
                                 Concept = new Concept
                                 {
                                     Code = "7MNL",
@@ -984,7 +984,7 @@ namespace MIRACUM_Mapper.db
                         {
                             new Source
                             {
-                                Name = "ElectrolyteTest",
+                                Name = "Laborcode",
                                 Concept = new Concept
                                 {
                                     Code = "2KLO",
